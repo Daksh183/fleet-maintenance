@@ -349,3 +349,22 @@ B is the principled way to set k, not a separate submission: its value comes aft
 **Caveats:** one constant k for all vehicles and the v9 cost model are assumed; an unobserved higher repair-cost level at the new depot would act like a higher k, so k is an *effective* value. The model-error term is a stand-in for everything the simulation misses. Remaining gains are more likely in the models (cost model, failure ranking) than in fine-tuning k.
 
 **Next uploads (22 Nov):** `v10_bayes`, `v9_k4`, `v10_k2`.
+
+---
+
+## v11: Ideas from the structure of the problem (all rejected)
+
+The decision is "flag iff p·μ is large" and the loss is dominated by expensive failures, so the ideas aim at the expected-cost side. Full-pipeline CV cost (3×5 repeated, paired vs baseline = v2 classifier + Platt + A1 cost model, k=1; baseline 0.8623).
+
+| Idea | CV cost | Paired Δ | Better |
+|---|---|---|---|
+| Classifier weighted by (c/mean c)^0.5 on failures | 0.873 | +0.011 ± 0.017 | 5/15 |
+| Same, exponent 1.0 | 0.887 | +0.025 ± 0.016 | 4/15 |
+| Direct expected-cost model (Tweedie), p = e/μ | 1.162 | +0.300 ± 0.095 | 4/15 |
+| Blend of baseline and Tweedie (logit average) | 0.911 | +0.048 ± 0.041 | 7/15 |
+
+**Budget as a direct quantile regression** (failures only, 3×5 CV, pinball loss on the cost scale at levels 0.5/0.8/0.91/0.97): worse than the current residual-quantile budget at every level (+6 to +74, better in at most 5/15 folds; at the 0.91 level 105.9 vs 158.1 (log) and 146.7 (raw)). Only ~320 failures, so a separate model per quantile is much noisier than one mean model with pooled residuals.
+
+**Conclusion:** the classifier and the budget method stay as they are. Fourth time a plausible-sounding change to the failure side does not beat fold noise; with ~320 training failures the pipeline is probably near what the data can support. Scripts: `src/v11_ideas.py`, `src/v11_quantile.py`.
+
+**Not testable on our labels:** rescaling the drifted sensors s120/s122 to the training depot (genuine wear or instrument offset is unknowable from train alone). It could only be judged on a public score, which would cost an upload slot; not recommended while the posterior-based files are still unevaluated.
