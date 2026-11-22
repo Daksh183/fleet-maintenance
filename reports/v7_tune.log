@@ -1,0 +1,8 @@
+reference (v2 params) OOF log-loss 0.01676  AUC 0.9840
+depth 3 mcw 1 col 0.5: best log-loss 0.01600 at 500 trees, AUC 0.9851  (31s)
+depth 3 mcw 5 col 0.5: best log-loss 0.01604 at 500 trees, AUC 0.9858  (29s)
+depth 5 mcw 1 col 0.5: best log-loss 0.01610 at 300 trees, AUC 0.9880  (43s)
+depth 5 mcw 5 col 0.5: best log-loss 0.01603 at 300 trees, AUC 0.9876  (38s)
+depth 7 mcw 1 col 0.5: best log-loss 0.01643 at 300 trees, AUC 0.9882  (54s)
+depth 7 mcw 5 col 0.5: best log-loss 0.01612 at 300 trees, AUC 0.9874  (45s)
+BEST {'depth': 3, 'mcw': 1, 'col': 0.5, 'n': 500, 'll': 0.016000597649863887, 'auc': np.float64(0.9851255995287755)}
