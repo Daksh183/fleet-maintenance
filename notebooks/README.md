@@ -15,7 +15,8 @@ One **self-contained** notebook per version (each needs only `../data/train.csv`
 | `v6_followup_missingness.ipynb` | v6 follow-up handling, missingness (reverted) | none | n/a |
 | `v7_depot_shift.ipynb` | v7 depot-shift analysis and prior correction | #8 `sub08-2026-11-21-v7_k4` | 19,067.17 |
 | `v8_histogram_features.ipynb` | v8 hidden histograms, shape features | none yet | n/a |
-| `v9_cost_model_capacity.ipynb` | v9 cost-model capacity, k-averaging | #7 `sub07-2026-11-21-v9_k1`, #9 `sub09-2026-11-21-v9_em` (`v9_k4` not uploaded yet) | 19,600.79 / 18,058.56 |
-| `v10_shift_posterior.ipynb` | v10 posterior over the shift k from all public scores; posterior-averaged decision | ready to upload (`v10_bayes`, `v10_k2`) | pending |
+| `v9_cost_model_capacity.ipynb` | v9 cost-model capacity, k-averaging | #7 `sub07-2026-11-21-v9_k1`, #9 `sub09-2026-11-21-v9_em`, #10 `sub10-2026-11-22-v9_k4` | 19,600.79 / 18,058.56 / 17,013.86 |
+| `v10_shift_posterior.ipynb` | v10 posterior over the shift k from all public scores; posterior-averaged decision | #11 `sub11-2026-11-22-v10_bayes` (`v10_k2` not uploaded) | 17,348.75 |
+| `v12_robust_cost_inputs.ipynb` | v12 cost model without the four drifted sensors (single change vs v10_bayes) | #12 `sub12-2026-11-22-v12_robust` | 16,839.86 |
 
 `build_*.py` + `nbkit.py` generate the notebooks; `run_all.sh` executes them; `verify_outputs.py` checks that each notebook regenerates exactly the CSV in `../submissions/`.

@@ -405,3 +405,11 @@ The decision is "flag iff p·μ is large" and the loss is dominated by expensive
 **Drift check on the cost model.** Its top features are the histogram means (h80_mean 22% of gain, h54_mean 11%, h37_mean 11%), which barely drift between depots (KS 0.005-0.024); gain-weighted KS of all inputs is 0.015. Dropping the four drifted sensors costs nothing (CV R² 0.801 vs 0.802) but moves test cost predictions by ~12% (mean abs log difference 0.118, correlation 0.986). So the cost model is mostly robust, and excluding those sensors is free insurance against extrapolation that CV cannot see.
 
 **`submission_v12_robust.csv`:** `v10_bayes` with exactly that one change (62 flags differ, mean absolute budget change 43 on commonly flagged vehicles). Expected public difference vs `v10_bayes` is small; it is a single-change probe, not a large expected gain. Scripts: `src/v12_costlinear.py`, `v12_costfamilies.py`, `v12_costdrift.py`, `v12_build.py`.
+
+### Public result of `v12_robust` (22 Nov): 16,839.86 (best so far), and what it does and does not show
+
+`v12_robust` scored **16,839.86**: 509 below `v10_bayes` (17,348.75) and 174 below `v9_k4` (17,013.86). The only difference from `v10_bayes` is the cost-model inputs (four drifted sensors excluded).
+
+**But the sensors are probably not the reason.** In the full cost model those four sensors carry 0.2% of the gain. Refitting the *same* cost model with a different random seed moves test cost predictions by a mean absolute log difference of 0.135 (0.138 for the drop-4 model), as much as dropping the sensors does (0.118). Averaging 5 seeds cuts the all-vs-drop-4 difference to 0.062. So the gain is most plausibly a cost-model fit that suited the public subset better, i.e. **model variance (random column sampling) is large at the new depot**, larger than the CV R² suggests. Part of the gain may also be public-subset noise.
+
+**Consequence:** a single XGBoost fit is a noisy budget-setter. Next candidate: seed-averaged cost model (and classifier), which removes this variance by construction. Script: `src/v12_seedcheck.py`.
