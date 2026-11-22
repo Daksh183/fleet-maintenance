@@ -1,0 +1,17 @@
+repeat 0 done
+repeat 1 done
+repeat 2 done
+
+cost model R2 (log): base 0.658  shape 0.787
+classifier base  : log-loss 0.01652  AUC 0.9846
+classifier shape : log-loss 0.01683  AUC 0.9862
+classifier ratio : log-loss 0.01692  AUC 0.9853
+
+variant  CV cost (15 folds)   paired Δ mean ± se     better   first-5 (fixed folds)
+A        0.8870±0.185     +0.0000 ± 0.0000    0/15    0.9037
+B        0.9225±0.219     +0.0355 ± 0.0193    2/15    0.9424
+[v8] features variant B (shape clf / base cost model), 3x5 CV: CV 0.9225 ± 0.2190
+C        0.9298±0.250     +0.0428 ± 0.0252    4/15    0.9810
+[v8] features variant C (ratio clf / base cost model), 3x5 CV: CV 0.9298 ± 0.2499
+E        0.8664±0.161     -0.0206 ± 0.0283    10/15    0.8567
+[v8] features variant E (base clf / shape cost model), 3x5 CV: CV 0.8664 ± 0.1612
