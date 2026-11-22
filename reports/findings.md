@@ -413,3 +413,18 @@ The decision is "flag iff p·μ is large" and the loss is dominated by expensive
 **But the sensors are probably not the reason.** In the full cost model those four sensors carry 0.2% of the gain. Refitting the *same* cost model with a different random seed moves test cost predictions by a mean absolute log difference of 0.135 (0.138 for the drop-4 model), as much as dropping the sensors does (0.118). Averaging 5 seeds cuts the all-vs-drop-4 difference to 0.062. So the gain is most plausibly a cost-model fit that suited the public subset better, i.e. **model variance (random column sampling) is large at the new depot**, larger than the CV R² suggests. Part of the gain may also be public-subset noise.
 
 **Consequence:** a single XGBoost fit is a noisy budget-setter. Next candidate: seed-averaged cost model (and classifier), which removes this variance by construction. Script: `src/v12_seedcheck.py`.
+
+---
+
+## v13 and v14: seed-averaging, and quantile-mapping the instrument-like drifted sensors
+
+**v13_bag** (`submission_v13_bag.csv`): `v12_robust` with the classifier averaged over 5 seeds and the cost model over 8 (drifted sensors excluded from the cost model; shift posterior unchanged; mean test p 0.0203 either way). Differs from `v12_robust` in 86 flags (mean abs budget change 59 on commonly flagged vehicles), from `v10_bayes` in 94. Purpose: remove the random-draw variance found in v12 (seed-to-seed test cost predictions differ by 0.135 mean abs log). Flag rate 8.795%.
+
+**What the four drifted sensors look like** (test/train quantile ratios at 5/25/50/75/95%):
+- `s122`: 2.45, 2.57, 2.68, 2.81, 4.89 (≈ ×2.7: looks like a units/instrument change)
+- `s120`: a counter with a ≈16M floor in test, ≈ ×2 at the top (offset + scale)
+- `s126`, `s128`: 1.01, 1.01, 1.05, 1.09, 1.81 (identical in the bulk, heavier upper tail: looks like a real shift in wear, not an instrument change, so quantile-mapping them would erase genuine signal)
+
+**The classifier does use `s120`/`s122`** (16.4% of its gain), unlike the cost model (0.2%). **v14_map** (`submission_v14_map.csv`) = `v13_bag` with the test values of `s120` and `s122` quantile-mapped onto the training distribution before the classifier scores them; `s126`/`s128` are left alone. Effects: mean test p 0.0203 → 0.0183, Spearman 0.986 with the unmapped scores, 1,670 of the top 1,760 vehicles shared. The shift factor k is rescaled (×1.72) so that the number of flagged vehicles equals `v13_bag` (1,759; 222 flags differ, mean abs budget change 75.5 on commonly flagged vehicles). Matching the average probability instead left 173 fewer flags, which would have confounded the comparison.
+
+**Caveats:** the mapping assumes the two depots have the same distribution of these two sensors, i.e. that the whole difference is instrumentation; if part is real wear, mapping removes real signal. Matching the flag count also raised the average p by ~10%, so v14's budgets are slightly higher: the comparison isolates ranking only approximately. Judged only by a public score; no CV test exists for this change.
