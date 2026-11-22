@@ -40,14 +40,14 @@ time,version,change,cv_mean,cv_std,holdout,public_lb,notes
 2026-11-20 16:53,v9,"cost model variant A2 (3x5 CV, k=1)",0.878,0.1534,,,"paired vs v8 cost model +0.0116, better 4/15, coverage 0.902"
 2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=1 (v9_k1),,,,19600.792,test flag rate 6.395%
 2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=3 (v9_k3),,,,,test flag rate 8.935%
-2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=4 (v9_k4),,,,,test flag rate 9.560%
+2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=4 (v9_k4),,,,17013.8646,test flag rate 9.560%
 2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=5 (v9_k5),,,,,test flag rate 10.125%
 2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=6.53 (v9_em),,,,18058.5558,test flag rate 11.240%
 2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=8 (v9_k8),,,,,test flag rate 11.925%
-2026-11-21 10:37,v10,"v10_bayes: v9 cost model, shift averaged over the posterior of k",,,,,test flag rate 8.935%
+2026-11-21 10:37,v10,"v10_bayes: v9 cost model, shift averaged over the posterior of k",,,,17348.7454,test flag rate 8.935%
 2026-11-21 10:37,v10,"v10_k2: v9 cost model, shift k=2",,,,,test flag rate 8.015%
 2026-11-21 10:46,v11,"idea W05 (3x5 CV, k=1, A1 cost model)",0.8731,0.152,,,"paired vs base +0.0108 ± 0.0170, better 5/15"
 2026-11-21 10:46,v11,"idea W10 (3x5 CV, k=1, A1 cost model)",0.8871,0.1308,,,"paired vs base +0.0248 ± 0.0159, better 4/15"
 2026-11-21 10:46,v11,"idea TW (3x5 CV, k=1, A1 cost model)",1.1621,0.4027,,,"paired vs base +0.2998 ± 0.0954, better 4/15"
 2026-11-21 10:46,v11,"idea BL (3x5 CV, k=1, A1 cost model)",0.9105,0.2334,,,"paired vs base +0.0482 ± 0.0407, better 7/15"
-2026-11-21 10:49,v11,"budget as direct quantile regression (XGB, log/raw) vs residual quantile, failures only 3x5",0,0,,,"pinball loss at levels .5/.8/.91/.97 worse in 11-15 of 15 folds by +6..+74; REJECTED, residual-quantile budget stays"
+2026-11-21 10:49,v11,"budget as direct quantile regression (XGB, log/raw) vs residual quantile, failures only 3x5",0.0,0.0,,,"pinball loss at levels .5/.8/.91/.97 worse in 11-15 of 15 folds by +6..+74; REJECTED, residual-quantile budget stays"
