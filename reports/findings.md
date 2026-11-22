@@ -368,3 +368,14 @@ The decision is "flag iff p·μ is large" and the loss is dominated by expensive
 **Conclusion:** the classifier and the budget method stay as they are. Fourth time a plausible-sounding change to the failure side does not beat fold noise; with ~320 training failures the pipeline is probably near what the data can support. Scripts: `src/v11_ideas.py`, `src/v11_quantile.py`.
 
 **Not testable on our labels:** rescaling the drifted sensors s120/s122 to the training depot (genuine wear or instrument offset is unknowable from train alone). It could only be judged on a public score, which would cost an upload slot; not recommended while the posterior-based files are still unevaluated.
+
+---
+
+## Public results of 22 Nov and updated posterior
+
+**Uploads:** `v9_k4` **17,013.86** (best so far), `v10_bayes` **17,348.75**. `v10_k2` was skipped (least informative).
+
+- **Both inside the v10 prediction** (v10_bayes predicted 17,100-17,300 ± 1,500). `v9_k4` beat `v10_bayes` by 335 points where the model expected `v10_bayes` ~120 better; the two files differ on few vehicles and the gap is within noise (standardised residuals -0.29 and -0.07).
+- **Posterior re-fitted with all 11 scores** (exact values): mean k 2.9 (2.4-3.1 across model-error settings), 90% interval [2, 4], mode 2.5-3. EM's 6.5 still has ~0 mass; k=4 has probability ~0.075. The posterior barely moved, so the Bayes decision (flags 8.8%) is essentially `v10_bayes` again.
+- **Expected cost per vehicle on the whole test set under the posterior:** Bayes 3.065, k=3 3.066, k=3.5 3.074, k=4 3.091 (+0.9%), k=2 3.096. Differences between k=3 and k=4 are ~1%, far below what public scores can resolve (conditional noise sd ~1,300 on a level).
+- **Final-file candidates:** `v10_bayes` (posterior-optimal) or `v9_k4` (best public score, 0.9% worse in expectation); choose by the posterior, not the public rank.
