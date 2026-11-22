@@ -1,0 +1,20 @@
+classifier seed 0
+classifier seed 1
+classifier seed 2
+classifier seed 3
+classifier seed 4
+mean calibrated test p: bag 0.0203 vs single 0.0203; correlation 0.9958
+cost seed 0
+cost seed 1
+cost seed 2
+cost seed 3
+cost seed 4
+cost seed 5
+cost seed 6
+cost seed 7
+vs v12_robust: flags differ   86; budget change on common flags: median   +0.0 mean abs   59.1
+vs v10_bayes : flags differ   94; budget change on common flags: median   +0.0 mean abs   62.0
+vs v9_k4     : flags differ  163; budget change on common flags: median   -7.7 mean abs   95.2
+flag rate 8.795%
+wrote submission_v13_bag.csv: flagged 8.79% of test vehicles (1759)
+[v13] v13_bag: seed-averaged classifier (5) and cost model (8, drifted sensors excluded), posterior-averaged shift: CV nan ± nan
