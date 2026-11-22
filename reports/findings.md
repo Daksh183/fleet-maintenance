@@ -379,3 +379,29 @@ The decision is "flag iff p·μ is large" and the loss is dominated by expensive
 - **Posterior re-fitted with all 11 scores** (exact values): mean k 2.9 (2.4-3.1 across model-error settings), 90% interval [2, 4], mode 2.5-3. EM's 6.5 still has ~0 mass; k=4 has probability ~0.075. The posterior barely moved, so the Bayes decision (flags 8.8%) is essentially `v10_bayes` again.
 - **Expected cost per vehicle on the whole test set under the posterior:** Bayes 3.065, k=3 3.066, k=3.5 3.074, k=4 3.091 (+0.9%), k=2 3.096. Differences between k=3 and k=4 are ~1%, far below what public scores can resolve (conditional noise sd ~1,300 on a level).
 - **Final-file candidates:** `v10_bayes` (posterior-optimal) or `v9_k4` (best public score, 0.9% worse in expectation); choose by the posterior, not the public rank.
+
+---
+
+## v12: Where the remaining cost is, and what could shrink it
+
+**Cost decomposition** (CV, k=1, v9 pipeline; 0.851 per vehicle): inspections 0.298 (2.98% flagged), **under-budget penalty 0.294**, missed failures 0.165, over-budget 0.094. 253 of 318 failures are flagged (80%). The ranking is already good; the biggest controllable piece is the budget, i.e. repair-cost prediction.
+
+**Cost-model form** (failures only, 2×5 CV; budget loss = pinball at q*; paired vs XGB A1, R² 0.805, loss 108.7):
+
+| Model | R² | Budget loss | Paired Δ |
+|---|---|---|---|
+| XGB depth 1 (additive) | 0.790 | 120.8 | +12.1 ± 2.7 (0/10 better) |
+| Lasso | 0.695 | 11,400 | blows up (linear extrapolation on outliers) |
+| Ridge | 0.563 | 15,996 | same |
+| Seed-averaged XGB (5) | 0.806 | 109.9 | +1.2 ± 3.3 |
+| CatBoost | 0.785 | 102.6 | −6.2 ± 6.2 (7/10) |
+| Random forest | 0.757 | 117.0 | +8.3 ± 7.3 |
+| Extra trees | 0.779 | 109.6 | +0.9 ± 5.8 |
+| Avg(XGB, CatBoost) | 0.802 | 105.0 | −3.7 ± 3.9 (8/10) |
+| Avg(XGB, CatBoost, ET) | 0.803 | 104.0 | −4.8 ± 4.3 (7/10) |
+
+**Conclusion:** boosted trees of depth 2 are the right form (linear and purely additive models are clearly worse; there are real interactions). CatBoost and the averages lean slightly better on budget loss but are within one standard error and worse on R², so no change. The cost model looks close to what 318 failures support.
+
+**Drift check on the cost model.** Its top features are the histogram means (h80_mean 22% of gain, h54_mean 11%, h37_mean 11%), which barely drift between depots (KS 0.005-0.024); gain-weighted KS of all inputs is 0.015. Dropping the four drifted sensors costs nothing (CV R² 0.801 vs 0.802) but moves test cost predictions by ~12% (mean abs log difference 0.118, correlation 0.986). So the cost model is mostly robust, and excluding those sensors is free insurance against extrapolation that CV cannot see.
+
+**`submission_v12_robust.csv`:** `v10_bayes` with exactly that one change (62 flags differ, mean absolute budget change 43 on commonly flagged vehicles). Expected public difference vs `v10_bayes` is small; it is a single-change probe, not a large expected gain. Scripts: `src/v12_costlinear.py`, `v12_costfamilies.py`, `v12_costdrift.py`, `v12_build.py`.

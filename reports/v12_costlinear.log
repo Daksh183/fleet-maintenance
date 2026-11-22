@@ -1,0 +1,18 @@
+fold done
+fold done
+fold done
+fold done
+fold done
+repeat 42
+fold done
+fold done
+fold done
+fold done
+fold done
+repeat 1
+XGB_A1          R2 0.805  budget loss  108.73  paired vs XGB_A1  +0.00 ± 0.00  better 0/10
+XGB_d1          R2 0.790  budget loss  120.79  paired vs XGB_A1 +12.05 ± 2.74  better 0/10
+Lasso           R2 0.695  budget loss 11400.50  paired vs XGB_A1 +11291.77 ± 11250.97  better 3/10
+Ridge           R2 0.563  budget loss 15995.63  paired vs XGB_A1 +15886.89 ± 14636.73  better 2/10
+Avg(XGB,Lasso)  R2 0.790  budget loss  223.58  paired vs XGB_A1 +114.85 ± 108.35  better 3/10
+n features 258  n failures 318

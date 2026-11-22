@@ -1,0 +1,17 @@
+fold done
+fold done
+fold done
+fold done
+fold done
+fold done
+fold done
+fold done
+fold done
+fold done
+XGB_A1           R2 0.805  budget loss  108.73  paired vs XGB_A1  +0.00 ± 0.00  better 0/10
+XGB_bag5         R2 0.806  budget loss  109.91  paired vs XGB_A1  +1.18 ± 3.34  better 6/10
+CatBoost         R2 0.785  budget loss  102.59  paired vs XGB_A1  -6.15 ± 6.15  better 7/10
+RF               R2 0.757  budget loss  117.00  paired vs XGB_A1  +8.26 ± 7.31  better 5/10
+ExtraTrees       R2 0.779  budget loss  109.61  paired vs XGB_A1  +0.87 ± 5.79  better 5/10
+Avg(XGB,Cat)     R2 0.802  budget loss  105.00  paired vs XGB_A1  -3.73 ± 3.92  better 8/10
+Avg(XGB,Cat,ET)  R2 0.803  budget loss  103.95  paired vs XGB_A1  -4.78 ± 4.32  better 7/10
