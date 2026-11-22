@@ -17,3 +17,4 @@ Submissions 1–6 were uploaded on the dates shown, before their notebooks exist
 | 09 | 2026-11-21 | `sub09-2026-11-21-v9_em` | `submissions/submission_v9_em.csv` | `notebooks/v9_cost_model_capacity.ipynb` | v9 cost model + prior shift k=6.53 (EM estimate) | 18,058.56 |
 | 10 | 2026-11-22 | `sub10-2026-11-22-v9_k4` | `submissions/submission_v9_k4.csv` | `notebooks/v9_cost_model_capacity.ipynb` | v9 cost model + prior shift k=4 (the comparison that was meant for 21 Nov) | 17,013.86 |
 | 11 | 2026-11-22 | `sub11-2026-11-22-v10_bayes` | `submissions/submission_v10_bayes.csv` | `notebooks/v10_shift_posterior.ipynb` | v10: v9 cost model + shift averaged over the posterior of k (behaves like k~3) | 17,348.75 |
+| 12 | 2026-11-22 | `sub12-2026-11-22-v12_robust` | `submissions/submission_v12_robust.csv` | `notebooks/v12_robust_cost_inputs.ipynb` | v12: v10_bayes with the repair-cost model excluding the four drifted sensors (single change) | 16,839.86 |
