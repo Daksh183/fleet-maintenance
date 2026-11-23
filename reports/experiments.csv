@@ -52,6 +52,6 @@ time,version,change,cv_mean,cv_std,holdout,public_lb,notes
 2026-11-21 10:46,v11,"idea BL (3x5 CV, k=1, A1 cost model)",0.9105,0.2334,,,"paired vs base +0.0482 ± 0.0407, better 7/15"
 2026-11-21 10:49,v11,"budget as direct quantile regression (XGB, log/raw) vs residual quantile, failures only 3x5",0.0,0.0,,,"pinball loss at levels .5/.8/.91/.97 worse in 11-15 of 15 folds by +6..+74; REJECTED, residual-quantile budget stays"
 2026-11-22 09:59,v12,v12_robust: v10_bayes with a cost model that excludes the four drifted sensors,,,,16839.8576,test flag rate 8.805%; 62 flags differ from v10_bayes; CV R2 of cost model 0.801 vs 0.802
-2026-11-22 10:07,v13,"v13_bag: seed-averaged classifier (5) and cost model (8, drifted sensors excluded), posterior-averaged shift",,,,,test flag rate 8.795%
+2026-11-22 10:07,v13,"v13_bag: seed-averaged classifier (5) and cost model (8, drifted sensors excluded), posterior-averaged shift",,,,17974.5456,test flag rate 8.795%
 2026-11-22 10:13,v14,v14_map: v13_bag with test s120/s122 quantile-mapped to the training distribution for the classifier (level matched),,,,,test flag rate 7.930%; 223 flags differ from v13_bag; lambda 1.315
-2026-11-22 10:16,v14,v14_map: v13_bag with test s120/s122 quantile-mapped to the training distribution for the classifier (flag count matched),,,,,test flag rate 8.795%; 222 flags differ from v13_bag; lambda 1.718
+2026-11-22 10:16,v14,v14_map: v13_bag with test s120/s122 quantile-mapped to the training distribution for the classifier (flag count matched),,,,17375.6526,test flag rate 8.795%; 222 flags differ from v13_bag; lambda 1.718

@@ -428,3 +428,14 @@ The decision is "flag iff p·μ is large" and the loss is dominated by expensive
 **The classifier does use `s120`/`s122`** (16.4% of its gain), unlike the cost model (0.2%). **v14_map** (`submission_v14_map.csv`) = `v13_bag` with the test values of `s120` and `s122` quantile-mapped onto the training distribution before the classifier scores them; `s126`/`s128` are left alone. Effects: mean test p 0.0203 → 0.0183, Spearman 0.986 with the unmapped scores, 1,670 of the top 1,760 vehicles shared. The shift factor k is rescaled (×1.72) so that the number of flagged vehicles equals `v13_bag` (1,759; 222 flags differ, mean abs budget change 75.5 on commonly flagged vehicles). Matching the average probability instead left 173 fewer flags, which would have confounded the comparison.
 
 **Caveats:** the mapping assumes the two depots have the same distribution of these two sensors, i.e. that the whole difference is instrumentation; if part is real wear, mapping removes real signal. Matching the flag count also raised the average p by ~10%, so v14's budgets are slightly higher: the comparison isolates ranking only approximately. Judged only by a public score; no CV test exists for this change.
+
+## Public results of 23 Nov (v13_bag, v14_map)
+| file | public LB |
+|---|---|
+| v12_robust | 16,839.86 |
+| v14_map | 17,375.65 |
+| v13_bag | 17,974.55 |
+
+- **v13_bag is 1,135 worse than v12_robust** although it only averages over seeds (5 classifier, 8 cost). Both use the same cost-model inputs and shift posterior. This supports the seed-variance caveat: v12_robust's lead over v10_bayes (-509) was mostly a favourable draw, not a robust gain. Public-LB differences of a few hundred between sibling files are therefore noise-level; v12_robust's level is not a reliable expectation for the private 70%.
+- **v14_map is 599 better than v13_bag** (same seeds and cost model; only the classifier sees s120/s122 quantile-mapped, flag count matched). That is a gain beyond my pre-stated 300 threshold, in the direction predicted by the instrument-shift hypothesis, but one comparison on 30% of test cannot prove it.
+- Caveat: v14_map is still 535 above v12_robust and 27 above v10_bayes; mapping helps relative to its own base, which is worse than v12's single draw.
