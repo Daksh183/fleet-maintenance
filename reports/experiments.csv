@@ -58,3 +58,5 @@ time,version,change,cv_mean,cv_std,holdout,public_lb,notes
 2026-11-23 08:39,v15,v15_map_v12: v12_robust with test s120/s122 quantile-mapped for the classifier (flag count matched),,,,17058.2816,1760 flags; 269 differ from v12_robust; lambda 1.769
 2026-11-23 08:40,v16,v16_bud125: v15 with flagged budgets x1.25,,,,,1761 flags
 2026-11-23 08:40,v16,v16_k135: v15 with shift scale x1.35,,,,,1978 flags
+2026-11-23 08:42,v17,v17_bud125: v12_robust with flagged budgets x1.25,,,,,1761 flags
+2026-11-23 08:42,v17,v17_k135: v12_robust with shift scale x1.35,,,,,1880 flags
