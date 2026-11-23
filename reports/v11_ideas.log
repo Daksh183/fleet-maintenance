@@ -1,0 +1,12 @@
+repeat 42 done
+repeat 1 done
+repeat 2 done
+base  CV cost 0.8623±0.150  paired vs base +0.0000 ± 0.0000  better 0/15
+W05   CV cost 0.8731±0.152  paired vs base +0.0108 ± 0.0170  better 5/15
+[v11] idea W05 (3x5 CV, k=1, A1 cost model): CV 0.8731 ± 0.1520
+W10   CV cost 0.8871±0.131  paired vs base +0.0248 ± 0.0159  better 4/15
+[v11] idea W10 (3x5 CV, k=1, A1 cost model): CV 0.8871 ± 0.1308
+TW    CV cost 1.1621±0.403  paired vs base +0.2998 ± 0.0954  better 4/15
+[v11] idea TW (3x5 CV, k=1, A1 cost model): CV 1.1621 ± 0.4027
+BL    CV cost 0.9105±0.233  paired vs base +0.0482 ± 0.0407  better 7/15
+[v11] idea BL (3x5 CV, k=1, A1 cost model): CV 0.9105 ± 0.2334

@@ -1,0 +1,62 @@
+time,version,change,cv_mean,cv_std,holdout,public_lb,notes
+2026-11-19 09:53,v0,flag nobody,3.4867,0.6923,3.5063,,
+2026-11-19 09:53,v0,"flag all, budget 0",10.6973,0.1385,10.7013,,
+2026-11-19 09:53,v0,"flag all, budget median (176)",14.0311,0.1357,14.0396,,
+2026-11-19 09:53,v0,oracle (perfect foresight),0.071,0.0005,0.0705,,
+2026-11-19 09:58,v2,"XGBoost, flag if p>0.5, budget=mean cost",2.5007,0.8329,,74933.1668,AUC 0.984; flagged 0.404%
+2026-11-19 09:58,v3,"same model, cost-based flag + newsvendor budget (global F)",1.2419,0.387,,27760.1404,flagged 2.083%
+2026-11-19 09:59,v3b,v3 minus drifted sensors s120/s122/s126/s128,1.2156,0.4101,,29529.7466,mean p test 0.0175
+2026-11-19 10:19,v4,platt calibration before cost rule,1.1073,0.2198,,23875.6666,paired delta vs v3 -0.135 ± 0.172; improved 4/5 folds
+2026-11-19 10:19,v4,iso calibration before cost rule,1.0523,0.2577,,,paired delta vs v3 -0.190 ± 0.160; improved 5/5 folds
+2026-11-19 10:19,v4,hold-out check: raw / platt / iso,,,,,"HOLD-OUT cost/vehicle (79 failures): raw 0.906, platt 0.955, iso 1.008. Raw best here; contradicts CV."
+2026-11-19 10:26,v5,"per-vehicle cost model, p=raw (full: flag+budget)",0.9986,0.3163,,26060.5718,A(global) 1.242; B(pv flag only) 1.081; D 0.999; paired D-A -0.243
+2026-11-19 10:26,v5,"per-vehicle cost model, p=platt (full: flag+budget)",0.9037,0.2352,,22968.5508,A(global) 1.107; B(pv flag only) 0.994; D 0.904; paired D-A -0.204
+2026-11-19 10:26,v5,"per-vehicle cost model, p=iso (full: flag+budget)",0.9322,0.2303,,,A(global) 1.052; B(pv flag only) 1.016; D 0.932; paired D-A -0.120
+2026-11-20 11:04,v6,"failure-p variant B, Platt, v5 cost model",0.9145,0.2471,,,A 0.904; paired +0.011; AUC 0.9846
+2026-11-20 11:04,v6,"failure-p variant C, Platt, v5 cost model",0.8878,0.1775,,,A 0.904; paired -0.016; AUC 0.9843
+2026-11-20 11:04,v6,"failure-p variant D, Platt, v5 cost model",0.8808,0.1805,,,A 0.904; paired -0.023; AUC 0.9841
+2026-11-20 11:04,v6,"failure-p variant E, Platt, v5 cost model",0.9229,0.2453,,,A 0.904; paired +0.019; AUC 0.9841
+2026-11-20 11:14,v7,"tuned XGB (depth 3, 500 trees, lr .02) x3 seeds, Platt, v5 cost, k=1",0.9395,0.231,,,paired vs v5 platt +0.036; log-loss 0.01589 vs 0.01676
+2026-11-20 11:14,v7,v7_em (v2 classifier): prior shift k=6.53 on test,,,,,test flag rate 10.845%; CV not applicable (shift is test-only)
+2026-11-20 11:14,v7,v7b_tuned_em: prior shift k=6.19 on test,,,,,test flag rate 10.190%; CV not applicable (shift is test-only) | REJECTED: tuned classifier worse on CV cost 5/5 folds; file moved to submissions/rejected/
+2026-11-20 11:14,v7,v7c_tuned_k4: prior shift k=4.00 on test,,,,,test flag rate 9.250%; CV not applicable (shift is test-only) | REJECTED: tuned classifier worse on CV cost 5/5 folds; file moved to submissions/rejected/
+2026-11-20 11:15,v7,"v2 classifier, Platt, prior shift k=3 on test",,,,,test flag rate 8.815%
+2026-11-20 11:15,v7,"v2 classifier, Platt, prior shift k=4 on test",,,,19067.165,test flag rate 9.450%
+2026-11-20 15:27,v7,"classifier candidate v2x3, Platt, v5 cost, k=1",0.912,0.2391,,,"paired vs v2 +0.008, better 2/5"
+2026-11-20 15:27,v7,"classifier candidate lgb, Platt, v5 cost, k=1",0.9878,0.3064,,,"paired vs v2 +0.084, better 1/5"
+2026-11-20 15:27,v7,"classifier candidate blend, Platt, v5 cost, k=1",0.9144,0.2416,,,"paired vs v2 +0.011, better 1/5"
+2026-11-20 15:27,v7,"classifier candidate blend3, Platt, v5 cost, k=1",0.9142,0.2423,,,"paired vs v2 +0.010, better 1/5"
+2026-11-20 15:34,v8,"features variant B (shape clf / base cost model), 3x5 CV",0.9225,0.219,,,"paired vs A +0.0355 ± 0.0193 (se), better 2/15"
+2026-11-20 15:34,v8,"features variant C (ratio clf / base cost model), 3x5 CV",0.9298,0.2499,,,"paired vs A +0.0428 ± 0.0252 (se), better 4/15"
+2026-11-20 15:34,v8,"features variant E (base clf / shape cost model), 3x5 CV",0.8664,0.1612,,,"paired vs A -0.0206 ± 0.0283 (se), better 10/15"
+2026-11-20 15:36,v8,shape cost model + prior shift k=1 (v8_k1),,,,,test flag rate 6.220%
+2026-11-20 15:36,v8,shape cost model + prior shift k=3 (v8_k3),,,,,test flag rate 8.700%
+2026-11-20 15:36,v8,shape cost model + prior shift k=4 (v8_k4),,,,,test flag rate 9.340%
+2026-11-20 15:36,v8,shape cost model + prior shift k=5 (v8_k5),,,,,test flag rate 9.905%
+2026-11-20 15:36,v8,shape cost model + prior shift k=6.53 (v8_em),,,,,test flag rate 10.805%
+2026-11-20 15:36,v8,shape cost model + prior shift k=8 (v8_k8),,,,,test flag rate 11.345%
+2026-11-20 15:36,v8,shape cost model + prior shift k=10 (v8_k10),,,,,test flag rate 12.155%
+2026-11-20 16:53,v9,"cost model variant A1 (3x5 CV, k=1)",0.8623,0.15,,,"paired vs v8 cost model -0.0041, better 7/15, coverage 0.926"
+2026-11-20 16:53,v9,"cost model variant A2 (3x5 CV, k=1)",0.878,0.1534,,,"paired vs v8 cost model +0.0116, better 4/15, coverage 0.902"
+2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=1 (v9_k1),,,,19600.792,test flag rate 6.395%
+2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=3 (v9_k3),,,,,test flag rate 8.935%
+2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=4 (v9_k4),,,,17013.8646,test flag rate 9.560%
+2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=5 (v9_k5),,,,,test flag rate 10.125%
+2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=6.53 (v9_em),,,,18058.5558,test flag rate 11.240%
+2026-11-20 16:54,v9,v9 cost model (1000 tr d2) + prior shift k=8 (v9_k8),,,,,test flag rate 11.925%
+2026-11-21 10:37,v10,"v10_bayes: v9 cost model, shift averaged over the posterior of k",,,,17348.7454,test flag rate 8.935%
+2026-11-21 10:37,v10,"v10_k2: v9 cost model, shift k=2",,,,,test flag rate 8.015%
+2026-11-21 10:46,v11,"idea W05 (3x5 CV, k=1, A1 cost model)",0.8731,0.152,,,"paired vs base +0.0108 ± 0.0170, better 5/15"
+2026-11-21 10:46,v11,"idea W10 (3x5 CV, k=1, A1 cost model)",0.8871,0.1308,,,"paired vs base +0.0248 ± 0.0159, better 4/15"
+2026-11-21 10:46,v11,"idea TW (3x5 CV, k=1, A1 cost model)",1.1621,0.4027,,,"paired vs base +0.2998 ± 0.0954, better 4/15"
+2026-11-21 10:46,v11,"idea BL (3x5 CV, k=1, A1 cost model)",0.9105,0.2334,,,"paired vs base +0.0482 ± 0.0407, better 7/15"
+2026-11-21 10:49,v11,"budget as direct quantile regression (XGB, log/raw) vs residual quantile, failures only 3x5",0.0,0.0,,,"pinball loss at levels .5/.8/.91/.97 worse in 11-15 of 15 folds by +6..+74; REJECTED, residual-quantile budget stays"
+2026-11-22 09:59,v12,v12_robust: v10_bayes with a cost model that excludes the four drifted sensors,,,,16839.8576,test flag rate 8.805%; 62 flags differ from v10_bayes; CV R2 of cost model 0.801 vs 0.802
+2026-11-22 10:07,v13,"v13_bag: seed-averaged classifier (5) and cost model (8, drifted sensors excluded), posterior-averaged shift",,,,17974.5456,test flag rate 8.795%
+2026-11-22 10:13,v14,v14_map: v13_bag with test s120/s122 quantile-mapped to the training distribution for the classifier (level matched),,,,,test flag rate 7.930%; 223 flags differ from v13_bag; lambda 1.315
+2026-11-22 10:16,v14,v14_map: v13_bag with test s120/s122 quantile-mapped to the training distribution for the classifier (flag count matched),,,,17375.6526,test flag rate 8.795%; 222 flags differ from v13_bag; lambda 1.718
+2026-11-23 08:39,v15,v15_map_v12: v12_robust with test s120/s122 quantile-mapped for the classifier (flag count matched),,,,17058.2816,1760 flags; 269 differ from v12_robust; lambda 1.769
+2026-11-23 08:40,v16,v16_bud125: v15 with flagged budgets x1.25,,,,,1761 flags
+2026-11-23 08:40,v16,v16_k135: v15 with shift scale x1.35,,,,,1978 flags
+2026-11-23 08:42,v17,v17_bud125: v12_robust with flagged budgets x1.25,,,,,1761 flags
+2026-11-23 08:42,v17,v17_k135: v12_robust with shift scale x1.35,,,,,1880 flags
