@@ -1,0 +1,8 @@
+repeat 42 done
+repeat 1 done
+repeat 2 done
+E   CV cost 0.8664±0.161  paired vs E +0.0000 ± 0.0000  better 0/15  coverage 0.919
+A1  CV cost 0.8623±0.150  paired vs E -0.0041 ± 0.0091  better 7/15  coverage 0.926
+[v9] cost model variant A1 (3x5 CV, k=1): CV 0.8623 ± 0.1500
+A2  CV cost 0.8780±0.153  paired vs E +0.0116 ± 0.0097  better 4/15  coverage 0.902
+[v9] cost model variant A2 (3x5 CV, k=1): CV 0.8780 ± 0.1534
