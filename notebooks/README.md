@@ -18,5 +18,8 @@ One **self-contained** notebook per version (each needs only `../data/train.csv`
 | `v9_cost_model_capacity.ipynb` | v9 cost-model capacity, k-averaging | #7 `sub07-2026-11-21-v9_k1`, #9 `sub09-2026-11-21-v9_em`, #10 `sub10-2026-11-22-v9_k4` | 19,600.79 / 18,058.56 / 17,013.86 |
 | `v10_shift_posterior.ipynb` | v10 posterior over the shift k from all public scores; posterior-averaged decision | #11 `sub11-2026-11-22-v10_bayes` (`v10_k2` not uploaded) | 17,348.75 |
 | `v12_robust_cost_inputs.ipynb` | v12 cost model without the four drifted sensors (single change vs v10_bayes) | #12 `sub12-2026-11-22-v12_robust` | 16,839.86 |
+| `v13_seed_averaging.ipynb` | v13 seed-averaged classifier (5) and cost model (8): is v12's gain seed luck? | #13 `sub13-2026-11-23-v13_bag` | 17,974.55 |
+| `v14_quantile_map.ipynb` | v14 quantile-map the instrument-like drifted sensors s120/s122 for the classifier (flag count matched, on the v13 base) | #14 `sub14-2026-11-23-v14_map` | 17,375.65 |
+| `v15_quantile_map_v12_base.ipynb` | v15 the same mapping on the v12_robust base (replication; conclusion: no reliable effect) | #15 `sub15-2026-11-23-v15_map_v12` | 17,058.28 |
 
-`build_*.py` + `nbkit.py` generate the notebooks; `run_all.sh` executes them; `verify_outputs.py` checks that each notebook regenerates exactly the CSV in `../submissions/`.
+`build_part1-5.py` + `nbkit.py` generate the notebooks; `run_all.sh` executes them; `verify_outputs.py` checks that each notebook regenerates exactly the CSV in `../submissions/`.
