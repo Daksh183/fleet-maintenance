@@ -55,3 +55,4 @@ time,version,change,cv_mean,cv_std,holdout,public_lb,notes
 2026-11-22 10:07,v13,"v13_bag: seed-averaged classifier (5) and cost model (8, drifted sensors excluded), posterior-averaged shift",,,,17974.5456,test flag rate 8.795%
 2026-11-22 10:13,v14,v14_map: v13_bag with test s120/s122 quantile-mapped to the training distribution for the classifier (level matched),,,,,test flag rate 7.930%; 223 flags differ from v13_bag; lambda 1.315
 2026-11-22 10:16,v14,v14_map: v13_bag with test s120/s122 quantile-mapped to the training distribution for the classifier (flag count matched),,,,17375.6526,test flag rate 8.795%; 222 flags differ from v13_bag; lambda 1.718
+2026-11-23 08:39,v15,v15_map_v12: v12_robust with test s120/s122 quantile-mapped for the classifier (flag count matched),,,,,1760 flags; 269 differ from v12_robust; lambda 1.769
