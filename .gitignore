@@ -18,3 +18,4 @@ notebooks/outputs/*
 notebooks/logs/
 notebooks/logs_summary.txt
 notebooks/logs_final.txt
+src/catboost_info/
