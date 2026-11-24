@@ -21,5 +21,6 @@ One **self-contained** notebook per version (each needs only `../data/train.csv`
 | `v13_seed_averaging.ipynb` | v13 seed-averaged classifier (5) and cost model (8): is v12's gain seed luck? | #13 `sub13-2026-11-23-v13_bag` | 17,974.55 |
 | `v14_quantile_map.ipynb` | v14 quantile-map the instrument-like drifted sensors s120/s122 for the classifier (flag count matched, on the v13 base) | #14 `sub14-2026-11-23-v14_map` | 17,375.65 |
 | `v15_quantile_map_v12_base.ipynb` | v15 the same mapping on the v12_robust base (replication; conclusion: no reliable effect) | #15 `sub15-2026-11-23-v15_map_v12` | 17,058.28 |
+| `v17_level_probes.ipynb` | v17 level probes on the v12_robust base: flagged budgets ×1.25, and k ×1.35 (≈7% more flags); with the model-expected change of each | #16 `sub16-2026-11-24-v17_bud125`, #17 `sub17-2026-11-24-v17_k135` | 16,826 / 16,908 |
 
-`build_part1-5.py` + `nbkit.py` generate the notebooks; `run_all.sh` executes them; `verify_outputs.py` checks that each notebook regenerates exactly the CSV in `../submissions/`.
+`build_part1-6.py` + `nbkit.py` generate the notebooks; `run_all.sh` executes them; `verify_outputs.py` checks that each notebook regenerates exactly the CSV in `../submissions/`.
