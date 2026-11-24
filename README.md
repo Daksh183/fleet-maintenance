@@ -39,7 +39,7 @@ Every row is one decision we took, **why**, and what the evidence was. "Judged o
 | **v13** Seed averaging | v12's gain may be a lucky random draw (single-fit test predictions differ ≈ 0.13 in mean absolute log-cost between seeds, more than the sensor effect ≈ 0.11) | Average classifier over 5 seeds and cost model over 8 seeds, nothing else | Public got **worse** (+1,135), so v12's lead was largely seed luck | **Keep averaging as the default for finals** (lower variance for the private 70%); do not read gaps of ~1,000 as real | 17,975 |
 | **v14** Rescale s120/s122 | These two sensors look like pure instrument changes (ratio ≈ ×2.7 at every quantile) and carry 16% of the classifier's gain | Quantile-map s120/s122 to the training distribution for the classifier; s126/s128 left alone (only their upper tail differs: looks like real wear); flag count matched so only ranking changes | −599 vs v13 | Promising, but see v15 | 17,376 |
 | **v15** Replicate v14 | Is v14's gain the mapping or the base? | Same mapping on the v12_robust base | +218 vs v12: opposite sign to v14 | **Mapping has no reliable effect → dropped.** Public differences below ~600 between sibling files are noise | 17,058 |
-| **v16 / v17** Level probes | Level (flag count, budget size) moves the score by thousands; ranking changes by hundreds | v17 on the v12_robust base: flagged budgets ×1.25, and a separate file with ~7% more flags (v16 repeats both on the v15 ranking; not uploaded) | Pending uploads (24 Nov) | Read against v12_robust | pending |
+| **v16 / v17** Level probes | Level (flag count, budget size) moves the score by thousands; ranking changes by hundreds | On the v12_robust base: flagged budgets ×1.25 (`v17_bud125`), and k ×1.35 for ~7% more flags (`v17_k135`); v16 = same on the v15 ranking, not uploaded | −14 and +68 vs v12_robust; the model itself expected +275 and +117 | **Both ties: the level is at its optimum.** Keep newsvendor budgets and the k posterior. The remaining gap can only come from ranking (the classifier) | 16,826 / 16,908 |
 
 **Standing rules these decisions follow**
 - Judge a change by **paired fold differences in cost** on repeated CV; AUC and log-loss gains were repeatedly misleading (v7 tuning, v8 features in the classifier, v11).
@@ -62,6 +62,7 @@ Every row is one decision we took, **why**, and what the evidence was. "Judged o
 | v10 | posterior over k, Bayes decision | n/a (test-only) | 17,349 |
 | v12 | cost model without drifted sensors | R² 0.801 | **16,840** |
 | v13 / v14 / v15 | seed averaging; s120/s122 mapping | variance / rank probes | 17,975 / 17,376 / 17,058 |
+| v17 | budget ×1.25; k ×1.35 | level probes | 16,826 / 16,908 |
 
 The shift correction is test-only: the dev set has no shift by construction, so only the public score and a simulation can judge it.
 

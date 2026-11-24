@@ -442,3 +442,15 @@ The decision is "flag iff p·μ is large" and the loss is dominated by expensive
 
 ## v15_map_v12 public result (23 Nov): 17,058.28
 Same mapping as v14, applied on the v12_robust base (flag count matched): **+218 vs v12_robust**, whereas on the v13_bag base it gave -599. The two effects have opposite signs, so the s120/s122 mapping has no reliable effect on the public score: it is within the noise of sibling files (a few hundred). We do not claim the mapping helps. Combined with the v13_bag result, differences below ~600 between sibling files are not interpretable.
+
+## v17 level probes, public results (24 Nov)
+Both on the v12_robust base, each a single change:
+| file | change | public | vs v12_robust | model-expected change (public 30%) |
+|---|---|---|---|---|
+| v17_bud125 | flagged budgets x1.25 | 16,826 | -14 | +275 |
+| v17_k135 | k x1.35, 1,880 flags (+119, all added) | 16,908 | +68 | +117 |
+
+- Both are ties, far inside the ~600 noise between sibling files. Neither level is worth changing: newsvendor budgets and the k posterior stay.
+- k135 landed where the model predicted. bud125 was ~290 better than predicted, a weak hint (inside noise) that test repairs are somewhat more expensive than the cost model expects.
+- Every level lever (k, flag count, budget size) is now exhausted. The remaining gap to the leader (~15k) has to come from ranking, i.e. which vehicles the classifier puts above the flag threshold at the new depot.
+Notebook: `notebooks/v17_level_probes.ipynb`. Script: `src/v17_probes.py`.
