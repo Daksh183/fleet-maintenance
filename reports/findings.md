@@ -468,3 +468,106 @@ Model comparison on all 18 public scores (v18 likelihood, maximised over failure
 - **The wear hypothesis is inert.** The classifier's ranking does not change at all (Spearman 1.000), so neither "instrument fault" (v19) nor "real wear" moves anything.
 - **The public scores cannot separate rankings with Spearman 0.92 (Δll 0.3).** Eighteen scalars over ~150 public failures carry far too little information to choose a ranking.
 - **Every file scores ≈ 1,000–2,500 above what the best-fitting model predicts** (v12 by +1,310). Because all files share the same public subset, this is mainly one shared draw (more or dearer failures in the public 30% than expected) and applies equally to every team on that subset. It is not a lever.
+
+## v22: adversarial feature selection, and the search for a structural gap (24–25 Nov)
+
+**Leaderboard 25 Nov:** Group 7 went from 22,152 to **14,610** in one day; Garv Jain is at 15,092 and we are 5th at 16,827. Two teams below 15.1k point to a real gap of about 12%.
+
+**s122 is the classifier's top feature and is mis-scaled at the test depot.** It carries 20% of the v12 classifier's gain, has KS 0.31 between depots, and its ratio to s126 is ×2.55 in test. Dropping s063/s120/s122 costs nothing in CV (−0.024 ± 0.011 per vehicle vs all sensors, better in 11/15 folds; `src/v22_advsel.py`, `reports/v22_drift.csv`). Dropping more of the shifted sensors (KS > 0.03) is clearly worse (+0.050). **`submission_v22_nos122.csv`** is v12_robust with the classifier refit without s120/s122, flag count matched (1,782; 221 flags differ), budgets capped at 8,000. v3b's public rejection of this (20 Nov) was at k=1, where the inflated s122 partly made up for under-flagging.
+
+**Ruled out while looking for a structural edge:**
+- **No id or row-order leak.** Failure rate, repair cost and sensors are flat across id order; lag-1 autocorrelation of failure is 0.008.
+- **No exact repair-cost formula.** Repair costs are integers (27 at exactly 5, 2 at 8,000). Log-log ridge reaches R² 0.78, lasso 0.80, XGB 0.81: the same ceiling for every model family.
+- **Apart from the counters, the depot difference is rounding.** Without s120/s122, adversarial AUC 0.94 comes almost entirely from s055 and s062, which the test depot records in multiples of 10 (train has finer values). Share-of-total KS is ≤ 0.04 for every bin of the realigned histogram, so the v1 realignment is right.
+- **CV cost is decision-optimal given p and the cost distribution.** At k=1: inspections 0.290, under-budget 0.292, over-budget 0.093, missed 0.171 per vehicle. Missed failures are only 4.9% of failure cost; the under-budget cost comes mostly from vehicles flagged at p < 0.09 with zero budget (flagging turns a cost c into 10 + 0.2c), which is the intended trade-off.
+
+## v22 public result and v23: is repair cost higher at the new depot? (25 Nov)
+
+**v22_nos122 public: 17,172.57**, 333 worse than v12_robust. Every ranking change to v12 has now scored worse on public (v13 +1,135, v18_ens10 +784, v14 +536, v15 +218, v22 ~+200, mean ≈ +570), although each was as good or better in CV. The most likely reading is that v12's public score was about 500 lucky.
+
+**Cost-level hypothesis (alpha = test repair costs / training).** Model-expected difference vs v12 under different true alphas, compared with what each file actually scored (`src/v23_alpha.py`):
+
+| file | observed vs v12 | α=1 | α=1.25 | α=1.5 | α=2 |
+|---|---|---|---|---|---|
+| v17_bud125 | −14 | +333 | −157 | −575 | −1,474 |
+| v17_k135 | +68 | +122 | −89 | −290 | −649 |
+| v9_k4 | +174 | +222 | −36 | −264 | −685 |
+
+All three point to **α ≈ 1.1–1.15**, not 1.5. At that level a consistent re-decision gains only about 100. `submission_v23_alpha15.csv` (α=1.5: 1,955 flags) would be about +300 if α ≈ 1.15. **Not recommended for upload.** The cost level does not explain the gap to the top teams either.
+
+## v24: informative censoring, i.e. hidden failures in the training labels (25 Nov)
+
+**Finding.** Healthy-labelled training vehicles with follow-up < 365 days look about 10× riskier to the OOF classifier than healthy vehicles followed for the full year: mean p 0.007–0.015 vs 0.0013, and 2.3–3.6% vs 0.5% above p = 0.05. Under random censoring the two groups would look the same. So censoring is informative: these records most likely stop because the vehicle failed, unrecorded. A complete-case model puts **≈ 211 expected hidden failures in train against 397 recorded (+53%)**. If test labels are complete, this alone explains part of the depot's higher failure odds (k).
+
+**v24_pu.** Instead of dropping censored-healthy rows (v18 IPCW), each one gets a soft label π = P(fail | x) from a model trained on complete cases, and the final classifier trains on all rows (censored rows duplicated with weights π / 1−π). Complete-case CV: −0.029 ± 0.011 per vehicle vs base (12/15 folds); doubling π gives −0.041 (10/15). Complete-case CV cannot see the benefit on the hidden failures themselves, since those rows are excluded from evaluation. `submission_v24_pu.csv`: flag count matched (1,761), 172 flags differ from v12, Spearman 0.906, budgets capped. `src/v24_pu.py`.
+
+**v24_pu public: 17,575** (+735 vs v12), close to v18_ens10 (+784). Both censoring "fixes" lost, so the test labels are most likely censored the same way as train. Sensors predict short follow-up among healthy vehicles (AUC 0.72), so a classifier trained on the raw labels already predicts what the test labels record. v24_pu_x2 was not uploaded.
+
+## v25: risk rises more steeply with wear at the new depot (25 Nov)
+
+Every file that reduced the model's reliance on wear sensors lost (v14 +536, v15 +218, v22 +333). Fit to all 20 public scores of p = sigmoid(a + logit(q_v12) + c·z), with z the standardised log wear counter on test (`src/v25_tilt.py`, `reports/v25_tilt.csv`):
+
+| wear covariate | Δlog-lik vs c=0 at c = −0.6 / −0.3 / 0.3 / 0.6 / 1.0 |
+|---|---|
+| s120 | −10.7 / −4.0 / ≈+2.0 / **+2.73** / +0.3 (interior optimum c ≈ 0.6) |
+| s122 | −4.7 / −1.8 / ≈+1.2 / +2.1 / +2.8 (still rising at 1.3: +2.9) |
+| s126 | −4.2 / −1.5 / ≈+1.0 / +1.7 / +2.2 |
+
+Positive tilt is favoured on every counter (likelihood ratio ≈ 15 for one parameter); negative tilt is clearly rejected. **`submission_v25_tilt.csv`**: q' = sigmoid(logit q + 0.6·z_s120), flag count matched (1,761), 144 flags differ from v20_cap (added flags median s126 27.9M vs removed 5.2M), budgets capped. Model-expected public difference vs v20_cap if the true tilt is 0 / 0.3 / 0.6 / 0.9: **+568 / −56 / −747 / −1,365**. Averaged over the tilt profile likelihood, the expected gain is about −500. `src/v25_build.py`.
+
+## v26: back to fundamentals, the problem statement and what the sensors are (25 Nov)
+
+**Problem statement (Classroom PDF, Problem 2), re-read in full.**
+- The scoring rule matches `src/score.py` exactly.
+- "Vehicles, columns and outcomes have been anonymised and **partly simulated** for this course; repair costs are simulated."
+- `followup_days` is "how many days of records exist after the service visit", and `failure` is a failure *recorded* in that window. This fits the v24 finding that test labels are censored the same way as train.
+- No hidden rule or quantity was found that we were not already using.
+
+**Every sensor is a usage counter.** Rank correlation with s126 is 0.88–0.98 for every top sensor (s122, s123, s149, s053, s034, s058). Failure rate rises steeply and keeps rising at extreme usage (s126 train bins: ≤q50 0.04%, q90–95 6.1%, q95–98 18.2%, q98–99 22.7%, q99–99.9 24.4%, >q99.9 30.4%). The test fleet has about twice the share in the top bins (s126 > train q95: 3.7% of test vs 2.0% of train). The v12 classifier already predicts higher risk there (mean q 0.34–0.40 for test vehicles above train q98), so tree extrapolation is not what limits it.
+
+**Failure risk is not a simple formula in the sensors.** Logistic regression on log1p sensors plus missing indicators: +0.108 per vehicle vs XGBoost in 3×5 CV (1/15 folds better); a 50/50 blend is also worse (+0.032). `src/v26_linear.py`.
+
+## v28: posterior harness over ~2,200 test-depot hypotheses (25 Nov)
+
+`src/v28_harness.py`. A truth is p = floor + (1−floor)·sigmoid(a + b·L + c·z), where L blends logit q_v12 with one of 9 other rankings we built (nos122, pu, pu_x2, ens10, ens4, fix120, fix, nodrift, v15-style map) at w ∈ {0, 0.5, 1}. z is a wear tilt on s120/s122/s126/s149 (c ∈ {0.4, 0.8, 1.2}), b ∈ {0.85, 1, 1.15} is the slope, and repair-cost level α ∈ {1, 1.15, 1.3}. Each of the 2,235 truths is weighted by the exact likelihood of all 20 public scores.
+
+**Posterior.**
+- No tilt: 5%. Weight is spread over tilt strengths (0.4: 30%, 0.8: 34%, 1.2: 31%) and sensors (s122 32%, s149 24%, s126 23%, s120 17%).
+- Blended rankings dominate: w=0.5 52%, w=1 42%, v12 alone only 5.5%.
+- Slope b ≥ 1 is favoured (1.15: 41%); α spread over 1.0–1.3; an unexplained-failure floor gets no weight.
+
+**Candidates scored by posterior-expected private cost vs v20_cap:**
+- **Bayes decision under the full posterior (`submission_v28_bayes.csv`):** −1,206, with 1,505 flags (fewer than v12's 1,761: 294 differ). It is better than v20_cap under every one of the 20 heaviest truths (from −475 to −2,150).
+- With level ×1.2 and budgets ×0.9 (`submission_v28_bayes_lv12.csv`): −1,058 with 1,590 flags; it has the best worst case (−517).
+- For reference: v12_robust +131 (the budget cap), v22 +46, v17_bud125 +196, v25_tilt +302, v24_pu +386, v17_k135 +677. These agree with how those files actually scored.
+
+**Caveat.** These are model-based expectations. The posterior is fitted to the same 20 public scores, so part of the edge may be fitting the public subset. The next public score is the real test, and it goes back into the posterior.
+
+## v29: harness round 2 (25 Nov)
+
+`src/v29_harness.py` adds about 2,200 truths to round 1's (4,400 in all):
+- three-way blends of v12 with pairs of fix / map / nodrift / nos122 / fix120,
+- wear tilts on two sensors (s122 plus s149, s126 or s120),
+- finer tilt values (0.6 / 1.0 / 1.6) and cost level ×1.45.
+
+**Posterior.**
+- Tilt on s122: 75%, centred on c = 0.8 (50%).
+- Rankings: blends led by `fix` (29%) and `map` (23%); v12 alone 2%.
+- Slope b = 1–1.15; cost level spread over 1.0–1.3 (×1.45: 13%).
+
+**Bayes decision (`submission_v29_bayes.csv`, 1,459 flags):** posterior-expected private cost −1,687 vs v20_cap, against −1,593 for v28_bayes. It is better than v20_cap under all 20 heaviest truths (worst −865). Expected score on a random 30% of test: **14,696** (v20_cap 15,418). Round 2 adds only about 95 over round 1, so within this hypothesis family the decision has converged.
+
+**v29_bayes public: 17,196** (predicted about 16,750, 80% range about 16,000–17,500). It is 357 worse than v12_robust and 450 worse than predicted, but inside the range. Round 3 (`src/v30_harness.py`) re-weights the ~4,000 plausible truths with this 21st score.
+
+**Round 3 result.** The 21st score barely moves the posterior (tilt on s122 c≈0.8; fix/map-led blends; α 1.0–1.3). The round-3 Bayes decision is essentially v29_bayes (1,460 vs 1,459 flags). **v29_bayes: posterior-expected private −1,611 vs v20_cap, better under all 20 heaviest truths (worst −528, best −2,052).** Expected score on a random 30%: v29 14,635 vs v20_cap 15,326.
+
+**The case against.** Every file that moved away from v12's flags has scored worse on public: v13 +1,135, v18 +784, v24 +735, v14 +536, v29 +357, v22 +333, v15 +218. The harness explains this as selection: v12 was the best of about a dozen public scores, so its flags fit the public 30% unusually well. That is plausible, but the public scores alone cannot confirm the private gain.
+
+## v31: textbook label-shift estimators from the literature (25 Nov)
+
+`src/v31_labelshift.py`, `src/v31_meanp.py`.
+- **BCTS + EM/MLLS** (Alexandari et al.; Saerens et al.): binary BCTS fits T = 0.816, b = +0.036, effectively our Platt scaling. EM gives a test failure rate of **4.5% (k = 6.5)**, the same as the v7 EM estimate.
+- **BBSE** (Lipton et al.), thresholds 0.02–0.5: **4.0–5.0% (k = 5.8–7.4)**.
+- **Harness posterior (21 public scores):** mean test failure rate **3.2%** (90% range 2.8–3.6%). Truths with ≥ 4% get zero weight. The one direct test of k ≈ 6.5 (v9_em) scored 18,058, about 1,000 worse than k = 4.
+- **Reading.** Both estimators assume pure label shift (p(x|y) unchanged), and the depot also has covariate shift (more worn fleet, rescaled s122). The literature notes these estimators are biased under such violations, so their agreement does not make them right.
+- **Effect on the decision.** Scaling the v29 Bayes probabilities up toward a 4.5% rate (level ×1.4) costs about 480 in harness-expected private cost vs v29 and has a worse worst case. **No change: v29_bayes stays the pick.**
