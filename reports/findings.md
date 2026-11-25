@@ -454,3 +454,17 @@ Both on the v12_robust base, each a single change:
 - k135 landed where the model predicted. bud125 was ~290 better than predicted, a weak hint (inside noise) that test repairs are somewhat more expensive than the cost model expects.
 - Every level lever (k, flag count, budget size) is now exhausted. The remaining gap to the leader (~15k) has to come from ranking, i.e. which vehicles the classifier puts above the flag threshold at the new depot.
 Notebook: `notebooks/v17_level_probes.ipynb`. Script: `src/v17_probes.py`.
+
+## v21: which risk ranking do the public scores support? (24 Nov)
+
+Model comparison on all 18 public scores (v18 likelihood, maximised over failure odds a, slope b and cost level alpha for each hypothesis). `src/v21_hyp.py`.
+
+| Hypothesis for the true risk ranking | max log-lik (eps 2%) | Spearman vs base |
+|---|---|---|
+| base: v12 classifier, test as loaded | −131.40 | 1.000 |
+| wear: test s120 offset treated as real wear, added to s126/s128/s012 | −131.40 | 1.000 |
+| nodrift: classifier without the five wear counters | −131.11 | 0.919 |
+
+- **The wear hypothesis is inert.** The classifier's ranking does not change at all (Spearman 1.000), so neither "instrument fault" (v19) nor "real wear" moves anything.
+- **The public scores cannot separate rankings with Spearman 0.92 (Δll 0.3).** Eighteen scalars over ~150 public failures carry far too little information to choose a ranking.
+- **Every file scores ≈ 1,000–2,500 above what the best-fitting model predicts** (v12 by +1,310). Because all files share the same public subset, this is mainly one shared draw (more or dearer failures in the public 30% than expected) and applies equally to every team on that subset. It is not a lever.

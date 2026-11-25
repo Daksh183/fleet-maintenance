@@ -60,3 +60,11 @@ time,version,change,cv_mean,cv_std,holdout,public_lb,notes
 2026-11-23 08:40,v16,v16_k135: v15 with shift scale x1.35,,,,,1978 flags
 2026-11-23 08:42,v17,v17_bud125: v12_robust with flagged budgets x1.25,,,,16826,1761 flags
 2026-11-23 08:42,v17,v17_k135: v12_robust with shift scale x1.35,,,,16908,1880 flags
+2026-11-24 08:58,v18,"v18_ipcw: v12_robust with censoring-aware (IPCW) classifier, flag count matched",,,,,1761 flags; lambda 0.822
+2026-11-24 09:11,v18,"v18_ens: v12_robust with IPCW 4-XGB ensemble classifier, flag count matched",,,,,1761 flags; lambda 1.061
+2026-11-24 09:37,v18,"v18_ens10: v12_robust with IPCW 10-XGB ensemble classifier, flag count matched",,,,17624,1761 flags; lambda 1.234
+2026-11-24 09:46,v19,"v19_fix120: v12_robust with test instrument faults fixed for the classifier (s120 offset), flag count matched",,,,,1760 flags; lambda 0.997
+2026-11-24 09:46,v19,"v19_fix: v12_robust with test instrument faults fixed for the classifier (s120 offset + s122 scale), flag count matched",,,,,1737 flags; lambda 1.627
+2026-11-24 10:06,v20,v20_cap: v12_robust with budgets capped at 8000 (max repair cost),,,,,4 budgets capped; flags identical
+2026-11-24 10:06,v20,"v20_clip: v12_robust re-decided with cost draws clipped to [5, 8000]",,,,,1762 flags; 1 differ
+2026-11-24 13:43,v22,"v22_nos122: v12_robust with classifier without s120/s122 (mis-scaled at the test depot), flag count matched, budgets capped 8000",,,,,1782 flags; lambda 1.401; 221 differ from v12

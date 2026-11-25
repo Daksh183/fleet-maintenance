@@ -1,0 +1,9 @@
+complete cases 35154 of 44800; IPCW weights: failures mean 1.252, healthy 1.275
+baseline (censored labels)   cost/vehicle 0.7764  wAUC 0.9886  wAP 0.7706  folds [0.745 0.788 0.604 0.68  1.065]
+IPCW                         cost/vehicle 0.7804  wAUC 0.9904  wAP 0.7948  folds [0.807 0.865 0.583 0.658 0.989]
+IPCW - baseline per fold: [ 0.0617  0.0769 -0.0209 -0.022  -0.0759]  mean +0.0040  better in 3/5
+cm_base        cost 0.7558  vs cm_base +0.0000±0.0000  better 0/15
+cm_bag5        cost 0.7553  vs cm_base -0.0005±0.0027  better 8/15
+cm_mix4        cost 0.7546  vs cm_base -0.0012±0.0029  better 11/15
+cm_d3          cost 0.7570  vs cm_base +0.0012±0.0067  better 7/15
+cm_lgb         cost 0.7520  vs cm_base -0.0038±0.0081  better 6/15
