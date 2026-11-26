@@ -571,3 +571,31 @@ Positive tilt is favoured on every counter (likelihood ratio ≈ 15 for one para
 - **Harness posterior (21 public scores):** mean test failure rate **3.2%** (90% range 2.8–3.6%). Truths with ≥ 4% get zero weight. The one direct test of k ≈ 6.5 (v9_em) scored 18,058, about 1,000 worse than k = 4.
 - **Reading.** Both estimators assume pure label shift (p(x|y) unchanged), and the depot also has covariate shift (more worn fleet, rescaled s122). The literature notes these estimators are biased under such violations, so their agreement does not make them right.
 - **Effect on the decision.** Scaling the v29 Bayes probabilities up toward a 4.5% rate (level ×1.4) costs about 480 in harness-expected private cost vs v29 and has a worse worst case. **No change: v29_bayes stays the pick.**
+
+## v32: shift-aware CV (a new validation strategy) (25 Nov)
+
+`src/v32_shiftcv.py`. Each validation fold is made to resemble the test depot:
+- validation vehicles are weighted by the test/train density ratio of log s126 (ESS 44,104 of 44,800; weighted failure rate 1.02% vs 0.71%);
+- two scenarios: 'real' (sensors unchanged) and 'instrument' (validation s122 ×2.55, s120 + 16.0M);
+- Platt is fitted on unshifted OOF from the other folds, as in the real pipeline;
+- each candidate is scored at its own best level, so only the ranking is compared.
+
+| ranking (cost/veh vs all sensors, 3×5 folds) | instrument | real |
+|---|---|---|
+| no s120/s122 (v22) | **−0.061 ± 0.009 (13/15)** | **−0.019 ± 0.009 (12/15)** |
+| map + no-s122 blend | −0.058 (14/15) | −0.016 (11/15) |
+| all + no-s122 blend | −0.046 (15/15) | −0.017 (11/15) |
+| oracle-fixed sensors | −0.042 (14/15) | 0 (identical) |
+| quantile-mapped (v14/15) | −0.039 (12/15) | +0.003 (9/15) |
+
+**Dropping s120/s122 is the best ranking under both stories.** Mapping and fixing help only if the quirks are instrument faults.
+
+**Combined with the harness (`src/v32_harness.py`).** The Bayes decision restricted to harness truths whose ranking includes no-s122 (27% of the posterior) scores −1,585 vs v20_cap under the full posterior. That is within 26 of v29_bayes (−1,611), with a worst case of −450 over the 20 heaviest truths. Expected score on a random 30%: 14,647. **`submission_v32_bayes_nos.csv`** (1,456 flags) is the decision both validations agree on.
+
+## v33: leave-one-out-style calibration check (25 Nov)
+
+Literal leave-one-out (56,000 XGBoost fits) is impractical. Its practical stand-in: Platt fitted on 20-fold OOF (models see 95% of dev) vs the 5-fold OOF used so far (80%). `src/v33_kfold_calib.py`.
+- Mean test q: 0.02015 vs 0.02032. The ranking is identical (Spearman 1.000000).
+- logit q20 = 1.035 · logit q5 + 0.020: a small affine change in logit, which the harness's fitted level a and slope b (grid 0.85 / 1 / 1.15) absorb.
+- Share of test above p = 0.05: 5.21% vs 5.37%.
+- **Conclusion:** 5-fold calibration is adequate, and the v29 / v32 decisions are unaffected.
