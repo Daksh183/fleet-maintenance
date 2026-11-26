@@ -24,3 +24,11 @@ One **self-contained** notebook per version (each needs only `../data/train.csv`
 | `v17_level_probes.ipynb` | v17 level probes on the v12_robust base: flagged budgets ×1.25, and k ×1.35 (≈7% more flags); with the model-expected change of each | #16 `sub16-2026-11-24-v17_bud125`, #17 `sub17-2026-11-24-v17_k135` | 16,826 / 16,908 |
 
 `build_part1-6.py` + `nbkit.py` generate the notebooks; `run_all.sh` executes them; `verify_outputs.py` checks that each notebook regenerates exactly the CSV in `../submissions/`.
+
+## V32–V34 rebuild notebooks
+
+These notebooks run the versioned builders from this checkout. They take the official competition ZIP and reuse project artifacts committed under `reports/` and `submissions/`.
+
+- [`v32_hist_kernel.ipynb`](v32_hist_kernel.ipynb) rebuilds [`submission_v32_hist_kernel.csv`](../submissions/submission_v32_hist_kernel.csv). Histogram-kernel cost blend. 16,991.5 reported.
+- [`v33_gp_budget.ipynb`](v33_gp_budget.ipynb) rebuilds [`submission_v33_gp_budget.csv`](../submissions/submission_v33_gp_budget.csv). Gaussian-process parts budgets. About 200 points better, per team.
+- [`v34_budget.ipynb`](v34_budget.ipynb) rebuilds [`submission_v34_budget.csv`](../submissions/submission_v34_budget.csv). Budget recalibration with fixed inspections. Unverified.

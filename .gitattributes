@@ -1,0 +1,4 @@
+submissions/submission_v32_hist_kernel.csv -text whitespace=cr-at-eol
+submissions/submission_v33_gp_budget.csv -text whitespace=cr-at-eol
+submissions/submission_v34_budget.csv -text whitespace=cr-at-eol
+reports/v32_*_paired_results.csv -text whitespace=cr-at-eol

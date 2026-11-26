@@ -20,9 +20,9 @@ A third diagnostic more closely approximated deployment. Using only official tes
 
 ## Build the model
 
-1. **Anchor the output to the submitted file.** Start with `V33/submission_v33_gp_budget.csv`. Verify its SHA-256 is `eed2288b3309d637fab1eae2975ceee67a07d6bfda5c39f1d24c9ebabe981583`. Join on official IDs and copy its 1,780 flags. The V34 directory contains the implementation. It reuses `V33/model/build_v33.py`, `v33_hist_gp.py`, `baseline.npz`, the bundled `fleet_runtime`, and the official competition ZIP. The cache supplies source-calibrated test probabilities, original tree log-cost predictions, and tree residuals. The builder has a baseline switch that reproduces the archived V33 output to the cent when both changes are disabled.
+1. **Anchor the output to the submitted file.** Start with `submissions/submission_v33_gp_budget.csv`. Verify its SHA-256 is `eed2288b3309d637fab1eae2975ceee67a07d6bfda5c39f1d24c9ebabe981583`. Join on official IDs and copy its 1,780 flags. The implementation is in `src/v34_build.py` and `src/v34_hist_gp.py`. It uses `reports/v33_baseline.npz`, the shared source modules, and the official competition ZIP. The cache supplies source-calibrated test probabilities, original tree log-cost predictions, and tree residuals. The builder has a baseline switch that reproduces the archived V33 output to the cent when both changes are disabled.
 
-2. **Fit a small correction to the failure odds.** Recreate the original 44,800-row development ordering with `common.split_holdout(train)`. Read the team's `fleet_runtime/reports/p_oof_v2.npy` in that order. Fit the original Platt calibrator on those raw out-of-fold predictions and recorded failures, then obtain a source probability q for each development row. The correction uses six sensor-derived inputs:
+2. **Fit a small correction to the failure odds.** Recreate the original 44,800-row development ordering with `common.split_holdout(train)`. Read the team's `reports/p_oof_v2.npy` in that order. Fit the original Platt calibrator on those raw out-of-fold predictions and recorded failures, then obtain a source probability q for each development row. The correction uses six sensor-derived inputs:
 
    - log(1 + s126), measuring the wear counter;
    - log(1 + sum of s080 through s089), requiring all ten usage bins;
@@ -57,10 +57,10 @@ The predictive-variance formula is standard Gaussian-process regression. A logis
 
 ## Rebuild the submitted candidate
 
-Run from the V34 directory with the project Python environment. Supply the official ZIP path for your machine.
+Run from the repository root with the project Python environment. Supply the official ZIP path for your machine.
 
 ```powershell
-python -B .\model\build_v34.py --zip "C:/path/to/mlprojectfleet2.zip" --v33 ..\V33 --runtime ..\fleet_runtime --out .\rebuilt
+python -B src/v34_build.py --zip "C:/path/to/mlprojectfleet2.zip" --repo . --out run/v34
 ```
 
 Use `--baseline` to verify the archived V33 file.

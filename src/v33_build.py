@@ -64,7 +64,7 @@ def main():
     args.out.mkdir(parents=True, exist_ok=True)
     filename = args.out / "submission_v33_gp_budget.csv"
     temporary = filename.with_suffix(".tmp")
-    frame.to_csv(temporary, index=False, float_format="%.2f")
+    frame.to_csv(temporary, index=False, float_format="%.2f", lineterminator="\r\n")
     check = pd.read_csv(temporary)
     pd.testing.assert_frame_equal(frame, check)
     assert list(check.columns) == ["id", "flag", "budget"]

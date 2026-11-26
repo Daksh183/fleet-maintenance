@@ -17,7 +17,7 @@ from scipy.optimize import minimize
 from scipy.special import expit, logit
 from sklearn.model_selection import KFold
 
-from hist_gp import GaussianSeverity, extract, select
+from v34_hist_gp import GaussianSeverity, extract, select
 
 ZIP_HASH = "6e88bb69b36a916f84fb50b38a0da53d5856815acdfc07b6b0cff7e18bb5297b"
 V33_HASH = "eed2288b3309d637fab1eae2975ceee67a07d6bfda5c39f1d24c9ebabe981583"
@@ -100,17 +100,17 @@ def file_hash(path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    for name in ("zip", "v33", "runtime", "out"):
+    for name in ("zip", "repo", "out"):
         parser.add_argument("--" + name, required=True, type=Path)
     parser.add_argument("--baseline", action="store_true", help="Rebuild the archived V33 for comparison.")
     args = parser.parse_args()
-    sys.path.insert(0, str((args.runtime / "src").resolve()))
+    sys.path.insert(0, str((args.repo / "src").resolve()))
     from calib import make
     from common import HIST, split_holdout
     from decide import decide_pv
     from score import vehicle_cost
 
-    old_path = args.v33 / "submission_v33_gp_budget.csv"
+    old_path = args.repo / "submissions/submission_v33_gp_budget.csv"
     assert file_hash(args.zip) == ZIP_HASH and file_hash(old_path) == V33_HASH
     assert vehicle_cost([400, 0, 1200, 0], [1, 1, 0, 0], [300, 50, 0, 0]).sum() == 1241
     with ZipFile(args.zip) as source:
@@ -127,7 +127,7 @@ def main():
     mean, sigma, residuals, standardized = estimate_severity(failures, test)
     supported = np.isfinite(mean)
 
-    with np.load(args.v33 / "model/baseline.npz", allow_pickle=False) as cached:
+    with np.load(args.repo / "reports/v33_baseline.npz", allow_pickle=False) as cached:
         assert np.array_equal(cached["ids"], test.id)
         q, tree, tree_residuals = (cached[key] for key in ("q", "tree", "residual"))
     p = 3 * q / (1 - q + 3 * q)
@@ -144,7 +144,7 @@ def main():
         budgets = rebuilt
     else:
         dev, _ = split_holdout(train)
-        raw = np.load(args.runtime / "reports/p_oof_v2.npy", allow_pickle=False)
+        raw = np.load(args.repo / "reports/p_oof_v2.npy", allow_pickle=False)
         assert raw.shape == (44800,) and len(dev) == len(raw) and np.isfinite(raw).all()
         platt = make("platt").fit(raw, dev.failure.to_numpy())
         correction = fit_context(dev, test, platt.predict(raw))
@@ -166,7 +166,7 @@ def main():
     name = old_path.name if args.baseline else "submission_v34_budget.csv"
     dest = args.out / name
     temporary = dest.with_suffix(".tmp")
-    frame.to_csv(temporary, index=False, float_format="%.2f")
+    frame.to_csv(temporary, index=False, float_format="%.2f", lineterminator="\r\n")
     pd.testing.assert_frame_equal(pd.read_csv(temporary), frame)
     if args.baseline:
         assert file_hash(temporary) == V33_HASH

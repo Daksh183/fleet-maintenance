@@ -389,7 +389,7 @@ def build(args, train, test, sample):
     ordered = result.set_index("id").loc[sample.id].reset_index()
     path = args.out / CANDIDATE
     tmp = path.with_suffix(".part")
-    ordered.to_csv(tmp, index=False, float_format="%.2f")
+    ordered.to_csv(tmp, index=False, float_format="%.2f", lineterminator="\r\n")
     reopened = pd.read_csv(tmp)
     validate_submission(reopened, sample.id)
     pd.testing.assert_frame_equal(ordered, reopened)
@@ -450,12 +450,12 @@ def main():
 def load_helpers(repo):
     global DRIFT, DROP, HIST, CM, SCENARIOS, fingerprint, split_holdout, target_layout
     global shape, make, decide_pv, Population, accounting, vehicle_cost
-    sys.path.insert(0, str((repo / "validation").resolve()))
+    sys.path.insert(0, str((repo / "tools").resolve()))
     from fit_folds import DRIFT, DROP, HIST, CM, SCENARIOS, fingerprint, split_holdout, target_layout
     from features import shape
     from calib import make
     from decide import decide_pv
-    from metrics import Population, accounting
+    from fleet_validation_metrics import Population, accounting
     from score import vehicle_cost
 
 
