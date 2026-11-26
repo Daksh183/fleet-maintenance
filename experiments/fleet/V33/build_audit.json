@@ -1,0 +1,10 @@
+{
+  "rows": 20000,
+  "flags": 1780,
+  "eligible_residuals": 383,
+  "supported_test_rows": 19386,
+  "changed_flags_vs_local_control": 0,
+  "changed_charged_budgets": 1076,
+  "allocated_budget": 1015671.1,
+  "sha256": "eed2288b3309d637fab1eae2975ceee67a07d6bfda5c39f1d24c9ebabe981583"
+}
