@@ -1,0 +1,13 @@
+{
+  "rows": 20000,
+  "inspections": 1780,
+  "changed_flags_vs_v33": 0,
+  "increased_inspected_budgets": 515,
+  "reduced_inspected_budgets": 629,
+  "zero_to_positive": 8,
+  "positive_to_zero": 11,
+  "total_parts_budget": 1016956.81,
+  "gp_residuals": 383,
+  "v33_rebuild_exact": true,
+  "sha256": "2492a24ab7128217cc5918f0c55585726a94982615ef35bb5e48f133147d5051"
+}
