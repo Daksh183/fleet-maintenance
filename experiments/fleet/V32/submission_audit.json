@@ -1,0 +1,39 @@
+{
+  "rows": 20000,
+  "inspection_flags": 1768,
+  "total_allocated_budget": 1059288.58,
+  "eligible_test_histograms": 19380,
+  "kernel_active_test_rows": 7678,
+  "kernel_residual_count": 360,
+  "archive_vs_historical_replay": {
+    "flags_added": 39,
+    "flags_dropped": 20,
+    "budgets_changed_on_common_flags": 1134,
+    "allocated_budget_delta": 11348.04,
+    "identical": false
+  },
+  "historical_replay_vs_fixed_odds_tree": {
+    "flags_added": 0,
+    "flags_dropped": 0,
+    "budgets_changed_on_common_flags": 1138,
+    "allocated_budget_delta": 5091.95,
+    "identical": false
+  },
+  "fixed_odds_tree_vs_v32": {
+    "flags_added": 26,
+    "flags_dropped": 38,
+    "budgets_changed_on_common_flags": 1035,
+    "allocated_budget_delta": -31184.65,
+    "identical": false
+  },
+  "archive_vs_v32": {
+    "flags_added": 46,
+    "flags_dropped": 39,
+    "budgets_changed_on_common_flags": 1132,
+    "allocated_budget_delta": -14744.66,
+    "identical": false
+  },
+  "matches_control_when_disabled": true,
+  "unsupported_rows_match_control": true,
+  "csv_sha256": "fd1b0f8d37f1557b927f0c96c40e4557782a05dd570877295ae7db724628f013"
+}

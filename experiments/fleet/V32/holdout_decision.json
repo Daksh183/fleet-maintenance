@@ -1,0 +1,9 @@
+{
+  "native_cost_tree": 0.7699269285714287,
+  "native_cost_v32": 0.7721226071428572,
+  "stress_wear_cost_tree": 1.9031803651618373,
+  "stress_wear_cost_v32": 1.896361800386015,
+  "stress_wear_delta_after_most_influential": 0.010137291990397387,
+  "favorable_stress_repeats_after_deletion": 0,
+  "supports_trial": false
+}
