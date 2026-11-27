@@ -1,0 +1,6 @@
+mono       mean q 0.0201; Spearman with v12 0.915; top-1500 overlap with v12 1419
+rates      mean q 0.0199; Spearman with v12 0.818; top-1500 overlap with v12 1390
+ratesOnly  mean q 0.0192; Spearman with v12 0.726; top-1500 overlap with v12 1159
+shares     mean q 0.0201; Spearman with v12 0.812; top-1500 overlap with v12 1395
+sharesOnly mean q 0.0200; Spearman with v12 0.806; top-1500 overlap with v12 1395
+linear+    mean q 0.0177; Spearman with v12 0.629; top-1500 overlap with v12 1279

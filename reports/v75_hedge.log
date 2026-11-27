@@ -1,0 +1,18 @@
+posterior by family: {'catboost': 0.08, 'other classifier': 0.738, 'survival': 0.173, 'v12': 0.009}
+wrote submission_v75_hedge.csv: flagged 7.20% of test vehicles (1440)
+wrote submission_v75_eqfam.csv: flagged 7.23% of test vehicles (1447)
+                flags  all (data weights)  equal families  only v12  only other classifier  only survival  only catboost
+file                                                                                                                    
+v51_gp_reduced    0.0                 0.0             0.0       0.0                    0.0            0.0            0.0
+v66_aft          -6.0                -7.0           -12.0      21.0                    2.0          -34.0          -36.0
+v69_aftfull     -68.0               124.0           129.0     326.0                  156.0           38.0           -5.0
+v75_hedge         7.0               -10.0           -15.0       9.0                   -5.0          -22.0          -41.0
+v75_eqfam        14.0                -4.0           -21.0     -10.0                    7.0          -23.0          -58.0
+                flags  all (data weights)  equal families  only v12  only other classifier  only survival  only catboost
+file                                                                                                                    
+v51_gp_reduced   1433             13641.0         13711.0   13879.0                13633.0        13645.0        13680.0
+v66_aft          1427             13634.0         13699.0   13900.0                13634.0        13611.0        13644.0
+v69_aftfull      1365             13765.0         13840.0   14205.0                13789.0        13683.0        13675.0
+v75_hedge        1440             13631.0         13697.0   13887.0                13628.0        13623.0        13639.0
+v75_eqfam        1447             13637.0         13690.0   13869.0                13640.0        13621.0        13623.0
+v75_hedge vs v51 flags differ 31 | v75_eqfam 32

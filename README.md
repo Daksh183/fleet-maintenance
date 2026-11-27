@@ -40,6 +40,15 @@ Every row is one decision we took, **why**, and what the evidence was. "Judged o
 | **v14** Rescale s120/s122 | These two sensors look like pure instrument changes (ratio ≈ ×2.7 at every quantile) and carry 16% of the classifier's gain | Quantile-map s120/s122 to the training distribution for the classifier; s126/s128 left alone (only their upper tail differs: looks like real wear); flag count matched so only ranking changes | −599 vs v13 | Promising, but see v15 | 17,376 |
 | **v15** Replicate v14 | Is v14's gain the mapping or the base? | Same mapping on the v12_robust base | +218 vs v12: opposite sign to v14 | **Mapping has no reliable effect → dropped.** Public differences below ~600 between sibling files are noise | 17,058 |
 | **v16 / v17** Level probes | Level (flag count, budget size) moves the score by thousands; ranking changes by hundreds | On the v12_robust base: flagged budgets ×1.25 (`v17_bud125`), and k ×1.35 for ~7% more flags (`v17_k135`); v16 = same on the v15 ranking, not uploaded | −14 and +68 vs v12_robust; the model itself expected +275 and +117 | **Both ties: the level is at its optimum.** Keep newsvendor budgets and the k posterior. The remaining gap can only come from ranking (the classifier) | 16,826 / 16,908 |
+| **v18** Censoring | Healthy vehicles followed < 365 days may hide failures | Inverse-probability-of-censoring weights, ten-model XGBoost ensemble, flag count matched | Better on complete-case CV, +784 public vs v12 | **Rejected**: test labels behave as if censored like train | 17,624 |
+| **v22** No s120/s122 | These two read differently at the test depot | Classifier without them, flag count matched | Free or better in CV, +333 public vs v12 | Kept only as one ranking hypothesis | 17,173 |
+| **v24** Soft labels | Use censored rows instead of dropping them | Soft failure labels from a complete-case model | +735 public vs v12 | **Rejected** | 17,575 |
+| **v29** Harness | Combine all public scores | Posterior over test-depot hypotheses; Bayes flags and budgets (tree repair costs) | +356 public vs v12 | Posterior only as good as its cost model | 17,196 |
+| **v32 / v33** GP repair cost | The histograms carry cost information the trees miss | Histogram-kernel blend; additive Gaussian process on histogram shapes | −252 public vs v12 (v33) | **Keep the GP**: the cost model is the lever | 16,992 / 16,588 |
+| **v35** GP budgets on harness flags | Combine the two | Flags from tree costs, budgets from the GP | +290 vs v33 | Decide flags and budgets under one cost model | 16,878 |
+| **v37** GP with wear and sensors | The GP only saw histograms | Add wear and cost-sensor groups; harness decides flags and budgets with it | −178 vs v33 | **Keep** | **16,410** |
+| **v42** Banded spread | Cost errors differ by predicted size | New sensor group; residual quantiles per predicted-cost band | Honest budget loss −6 to −8% in CV; +77 public (noise ≈ 450) | **Keep** on CV evidence; public cannot separate it from v37 | 16,487 |
+| **v51** Fewer cost inputs | Does every GP input earn its place? | Drop the usage group and two histograms; average with and without one wear sensor | Honest budget loss −7%, end-to-end CV cost −2.1%; −99 public vs v42 (within noise) | **Keep** on CV evidence | **16,388** |
 
 **Standing rules these decisions follow**
 - Judge a change by **paired fold differences in cost** on repeated CV; AUC and log-loss gains were repeatedly misleading (v7 tuning, v8 features in the classifier, v11).
@@ -60,9 +69,14 @@ Every row is one decision we took, **why**, and what the evidence was. "Judged o
 | v8 | histogram-shape features in the cost model (R² 0.66 → 0.79) | 0.866 (3×5 CV) | superseded |
 | v9 | cost model 1,000 trees depth 2; k as belief | 0.862 (3×5 CV) | 17,014 (k=4) |
 | v10 | posterior over k, Bayes decision | n/a (test-only) | 17,349 |
-| v12 | cost model without drifted sensors | R² 0.801 | **16,840** |
+| v12 | cost model without drifted sensors | R² 0.801 | 16,840 |
 | v13 / v14 / v15 | seed averaging; s120/s122 mapping | variance / rank probes | 17,975 / 17,376 / 17,058 |
 | v17 | budget ×1.25; k ×1.35 | level probes | 16,826 / 16,908 |
+| v18 / v22 / v24 | censoring ensemble; no s120/s122; soft labels | ranking probes | 17,624 / 17,173 / 17,575 |
+| v29 / v35 | harness decisions (tree costs; GP budgets) | test-only | 17,196 / 16,878 |
+| v32 / v33 | histogram-kernel cost; GP repair budgets | see `reports/` | 16,992 / 16,588 |
+| v37 / v42 | GP with wear and sensors; banded cost spread | budget loss −6 to −8% (v42 vs v37) | 16,410 / 16,487 |
+| v51 | GP with fewer inputs | budget loss −7%, cost/veh −2.1% vs v42 | **16,388** |
 
 The shift correction is test-only: the dev set has no shift by construction, so only the public score and a simulation can judge it.
 

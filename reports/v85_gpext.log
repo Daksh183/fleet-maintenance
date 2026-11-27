@@ -1,0 +1,14 @@
+                      variant  mean  seeds_better  boot_sd  p_better
+             lin | pvar+bands -4.69             8     4.09      0.86
+              ls | pvar+bands -4.34             8     5.46      0.80
+gpx (same model) | pvar+bands -3.40             7     3.97      0.80
+          ls+lin | pvar+bands -2.70             7     5.14      0.70
+                   lin | pvar -0.93             5     3.47      0.61
+                          lin -0.44             6     1.72      0.60
+                         base  0.00             0     0.00      0.00
+             gpx (same model)  0.00             4     0.00      0.19
+                    ls | pvar  0.62             3     5.91      0.49
+      gpx (same model) | pvar  0.81             3     3.37      0.43
+                ls+lin | pvar  2.13             3     5.65      0.37
+                           ls  4.76             1     7.49      0.30
+                       ls+lin  5.30             0     7.78      0.28

@@ -1,0 +1,33 @@
+                     variant  mean  seeds_better  boot_sd  p_better
+                 - wear s123 -2.24             4     1.91      0.88
+                   blend 0.9 -1.19             4     1.03      0.87
+                 - wear s149 -0.53             3     0.97      0.73
+               - sensor s104 -0.23             2     0.61      0.63
++ other hists as 1 raw block -0.21             3     1.60      0.57
+                     reduced  0.00             0     0.00      0.00
+               + sensor s120  0.22             1     0.29      0.23
+               + sensor s010  0.66             2     0.61      0.13
+               + sensor s049  0.68             2     1.11      0.26
+               + sensor s122  0.70             1     0.66      0.15
+                 - wear s126  0.96             2     3.76      0.39
+             + missing count  0.96             1     0.56      0.03
+               - sensor s078  1.26             1     3.31      0.41
+               - sensor s105  1.87             1     1.41      0.08
+         + all other sensors  2.37             1     1.63      0.08
+            + hist s023 back  3.10             0     1.05      0.00
+            + hist s129 back  3.45             0     2.09      0.03
+               - sensor s116  3.58             0     1.58      0.00
+          rational quadratic  3.85             1     2.36      0.02
+               - sensor s142  5.68             0     3.74      0.05
+                  Matern 3/2  6.14             0     5.00      0.09
+                         v42  6.88             0     2.53      0.00
+                 - hist s154  6.98             1     6.02      0.10
+                 - hist s037  9.36             0     4.09      0.01
+                 - hist s054 17.23             0     8.27      0.02
+                 - hist s080 43.93             0    10.43      0.00
+
+reduced and v47 candidates vs v42, fresh seeds 201-210, with vehicle bootstrap:
+      variant   mean  seeds_better  boot_sd  p_better
+      reduced -4.899             9    1.907     0.997
+drop exp+s129 -3.080            10    2.080     0.943
+          v42  0.000             0    0.000     0.000

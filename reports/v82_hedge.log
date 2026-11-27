@@ -1,0 +1,20 @@
+posterior by family: {'catboost': 0.076, 'other classifier': 0.698, 'survival': 0.218, 'v12': 0.009}
+wrote submission_v82_hedge.csv: flagged 7.18% of test vehicles (1436)
+wrote submission_v82_eqfam.csv: flagged 7.23% of test vehicles (1446)
+                flags  all (data weights)  equal families  only v12  only other classifier  only survival  only catboost
+file                                                                                                                    
+v51_gp_reduced    0.0                 0.0             0.0       0.0                    0.0            0.0            0.0
+v66_aft          -6.0                -9.0           -12.0      21.0                    2.0          -36.0          -36.0
+v75_hedge         7.0               -11.0           -15.0       9.0                   -5.0          -22.0          -41.0
+v75_eqfam        14.0                -5.0           -21.0     -10.0                    7.0          -25.0          -58.0
+v82_hedge         3.0               -11.0           -15.0      14.0                   -4.0          -26.0          -42.0
+v82_eqfam        13.0                -5.0           -22.0      -8.0                    7.0          -26.0          -59.0
+                flags  all (data weights)  equal families  only v12  only other classifier  only survival  only catboost
+file                                                                                                                    
+v51_gp_reduced   1433             13646.0         13718.0   13879.0                13633.0        13668.0        13680.0
+v66_aft          1427             13637.0         13705.0   13900.0                13634.0        13632.0        13643.0
+v75_hedge        1440             13635.0         13703.0   13887.0                13628.0        13646.0        13639.0
+v75_eqfam        1447             13641.0         13696.0   13869.0                13640.0        13643.0        13622.0
+v82_hedge        1436             13635.0         13703.0   13892.0                13629.0        13642.0        13637.0
+v82_eqfam        1446             13641.0         13696.0   13870.0                13640.0        13642.0        13621.0
+v75_hedge vs v51 flags differ 31 | v75_eqfam 33

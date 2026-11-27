@@ -1,0 +1,2 @@
+best log-lik: v51 cost model -190.42, v87 cost model -190.15; log-evidence (same truths, equal prior) v51 -186.02, v87 -185.85
+posterior probability that the v87 cost model is right (equal prior): 0.541

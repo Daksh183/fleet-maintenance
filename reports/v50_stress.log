@@ -1,0 +1,9 @@
+variant             reduced  reduced - s123  v42
+v42 flags             -5.51           -7.64  0.0
+v37 flags             -5.51           -7.64  0.0
+v12 flags             -5.51           -7.63  0.0
+10-fold               -5.64           -7.72  0.0
+test-wear weighted    -4.17           -7.16  0.0
+extrapolate to top-wear third: v42              +0.00%  rmse 0.6394
+extrapolate to top-wear third: reduced          -8.89%  rmse 0.6240
+extrapolate to top-wear third: reduced - s123   -7.13%  rmse 0.6257

@@ -1,0 +1,5 @@
+            s054  s055  s056  s057  s058  s059  s060  s061  s062
+train_step     1     0    10    10   100   100    10    10     1
+test_step      0    10    10   100   100    10    10     1    10
+rounded training data : top-1433 overlap with base 1390; rank corr 0.9586; mean |logit diff| in base top-1433 0.195
+other random seed     : top-1433 overlap with base 1369; rank corr 0.9026; mean |logit diff| in base top-1433 0.355

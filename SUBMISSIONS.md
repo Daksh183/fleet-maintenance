@@ -2,6 +2,8 @@
 
 Every Kaggle submission has an annotated git tag `subNN-YYYY-MM-DD-<version>` (unique number + submission date), created with `tools/tag_submission.sh`. Public scores are total cost on the public 30% of test (lower is better). **Only the last submission before the 27 Nov deadline is evaluated**, so the final upload must be the chosen model.
 
+Submissions 22 and 23 were uploaded by Daksh183; their dates are taken from the commits and should be confirmed on Kaggle's submissions page. Submissions 18–27 were logged and their notebooks for 18–21 and 24–27 written on 27 Nov, after upload; those tags are to be created at the commit that adds the notebooks.
+
 Submissions 1–6 were uploaded on the dates shown, before their notebooks existed. Each tag was created on 20 Nov 2026, after the fact, at the commit that adds the per-version notebooks, and points to the notebook that regenerates that exact file (verified: identical flags and budgets, see `notebooks/verify_outputs.py`).
 
 | # | Date | Tag | File | Notebook | What changed | Public score |
@@ -23,3 +25,14 @@ Submissions 1–6 were uploaded on the dates shown, before their notebooks exist
 | 15 | 2026-11-23 | `sub15-2026-11-23-v15_map_v12` | `submissions/submission_v15_map_v12.csv` | `notebooks/v15_quantile_map_v12_base.ipynb` | v15: v12_robust with the same s120/s122 mapping (replication of v14), flag count matched | 17,058.28 |
 | 16 | 2026-11-24 | `sub16-2026-11-24-v17_bud125` | `submissions/submission_v17_bud125.csv` | `notebooks/v17_level_probes.ipynb` | v17: v12_robust with every flagged budget x1.25 (level probe) | 16,826 |
 | 17 | 2026-11-24 | `sub17-2026-11-24-v17_k135` | `submissions/submission_v17_k135.csv` | `notebooks/v17_level_probes.ipynb` | v17: v12_robust with the shift factor k scaled x1.35, 1,880 flags (level probe) | 16,908 |
+| 18 | 2026-11-24 | `sub18-2026-11-24-v18_ens10` | `submissions/submission_v18_ens10.csv` | `notebooks/v18_censoring_ensemble.ipynb` | censoring-weighted ensemble of ten XGBoost classifiers on the v12 base, flag count matched | 17,624 |
+| 19 | 2026-11-25 | `sub19-2026-11-25-v22_nos122` | `submissions/submission_v22_nos122.csv` | `notebooks/v22_drop_depot_sensors.ipynb` | classifier without the mis-scaled sensors s120 and s122, flag count matched | 17,172.57 |
+| 20 | 2026-11-25 | `sub20-2026-11-25-v24_pu` | `submissions/submission_v24_pu.csv` | `notebooks/v24_soft_labels.ipynb` | soft labels for censored healthy vehicles, flag count matched | 17,575 |
+| 21 | 2026-11-25 | `sub21-2026-11-25-v29_bayes` | `submissions/submission_v29_bayes.csv` | `notebooks/v29_harness_bayes.ipynb` | Bayes flags and budgets under a posterior over test-depot hypotheses fitted to the public scores (tree repair costs) | 17,196 |
+| 22 | 2026-11-26 | `sub22-2026-11-26-v32_hist_kernel` | `submissions/submission_v32_hist_kernel.csv` | `notebooks/v32_hist_kernel.ipynb` | histogram-kernel repair-cost blend | 16,991.5 |
+| 23 | 2026-11-26 | `sub23-2026-11-26-v33_gp_budget` | `submissions/submission_v33_gp_budget.csv` | `notebooks/v33_gp_budget.ipynb` | Gaussian-process (sensor histogram) repair budgets | 16,587.75 |
+| 24 | 2026-11-27 | `sub24-2026-11-27-v35_combo` | `submissions/submission_v35_combo.csv` | `notebooks/v35_gp_budget_combo.ipynb` | harness flags with Gaussian-process budgets | 16,878 |
+| 25 | 2026-11-27 | `sub25-2026-11-27-v37_bayes_gp2` | `submissions/submission_v37_bayes_gp2.csv` | `notebooks/v37_gp_sensor_costs.ipynb` | Gaussian-process costs with wear and sensor groups, used for both flags and budgets | 16,410 |
+| 26 | 2026-11-27 | `sub26-2026-11-27-v42_gp_bands` | `submissions/submission_v42_gp_bands.csv` | `notebooks/v42_gp_banded_spread.ipynb` | re-selected sensor group and cost spread by predicted-cost band | 16,487 |
+| 27 | 2026-11-27 | `sub27-2026-11-27-v51_gp_reduced` | `submissions/submission_v51_gp_reduced.csv` | `notebooks/v51_gp_reduced_inputs.ipynb` | repair-cost model without the exposure group and the s023 and s129 histograms, averaged over with/without s123 | 16,388 |
+| 28 | 2026-11-27 | `sub28-2026-11-27-v82_hedge` | `submissions/submission_v82_hedge.csv` | `notebooks/v82_hedge.ipynb` | Bayes decision over every ranking family (classifiers, survival, CatBoost, cost-weighted survival), weighted by the public scores | pending |

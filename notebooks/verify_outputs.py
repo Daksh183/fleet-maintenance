@@ -3,7 +3,8 @@ import numpy as np, pandas as pd
 from pathlib import Path
 rows = [("v2", 1), ("v3", 2), ("v3b", 3), ("v4_platt", 4), ("v5_raw", 5), ("v5_platt", 6),
         ("v4_iso", None), ("v5_iso", None), ("v7_k4", None), ("v7_em", None), ("v8_k4", None),
-        ("v9_k1", None), ("v9_k4", None), ("v9_em", None), ("v10_bayes", None), ("v10_k2", None), ("v12_robust", 12), ("v13_bag", 13), ("v14_map", 14), ("v15_map_v12", 15), ("v17_bud125", 16), ("v17_k135", 17)]
+        ("v9_k1", None), ("v9_k4", None), ("v9_em", None), ("v10_bayes", None), ("v10_k2", None), ("v12_robust", 12), ("v13_bag", 13), ("v14_map", 14), ("v15_map_v12", 15), ("v17_bud125", 16), ("v17_k135", 17), ("v18_ens10", 18),
+        ("v22_nos122", 19), ("v24_pu", 20), ("v29_bayes", 21), ("v35_combo", 24), ("v37_bayes_gp2", 25), ("v42_gp_bands", 26), ("v51_gp_reduced", 27), ("v66_aft", None), ("v69_aftfull", None), ("v82_hedge", 28)]
 ok = True
 for name, n in rows:
     a, b = Path(f"outputs/submission_{name}.csv"), Path(f"../submissions/submission_{name}.csv")

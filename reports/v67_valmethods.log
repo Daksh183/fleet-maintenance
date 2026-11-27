@@ -1,0 +1,54 @@
+clusters: dev share / test share / failures: [(0.1, 0.12, 172), (0.08, 0.08, 1), (0.33, 0.33, 64), (0.03, 0.03, 9), (0.17, 0.16, 68), (0.09, 0.09, 3), (0.12, 0.11, 0), (0.08, 0.08, 1)]
+ho-wear train failures 24, scored 8961 vehicles with 294 failures
+ho-usage train failures 25, scored 8960 vehicles with 293 failures
+/Users/vaibhavsahni/Documents/fleet-maintenance/.venv/lib/python3.9/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+fits done
+
+cost change vs v12 classifier, % (negative = better)
+method   plain  wear  complete  instrument  cluster  ho-wear  ho-usage
+cand                                                                  
+base      0.00  0.00      0.00        0.00     0.00     0.00      0.00
+nos122    2.11  2.12     -0.05       -0.25    -1.19    -3.30      0.33
+ipcw     -0.47 -0.42     -4.28       -1.04    -6.79     8.11      6.55
+pu       -0.76 -0.49     -1.87        0.42     0.31    -4.41      3.51
+bag3     -0.18 -0.24      0.36        0.82    -3.16    -2.11     -0.96
+drop4    -0.81 -1.12      0.61       -3.11    -3.57    -3.77     -4.15
+aft      -3.15 -3.31     -2.38       -5.39    -4.22   -11.77     -5.10
+aftd6    -1.91 -2.19     -2.36       -4.18    -7.82    -6.87     -6.57
+clf+aft  -2.83 -2.89     -2.10       -5.07    -2.84    -7.14     -3.47
+
+bootstrap probability of beating v12
+method   plain  wear  complete  instrument  cluster  ho-wear  ho-usage
+cand                                                                  
+base      0.00  0.00      0.00        0.00     0.00     0.00      0.00
+nos122    0.10  0.11      0.47        0.56     0.66     0.93      0.40
+ipcw      0.57  0.57      0.93        0.66     1.00     0.30      0.03
+pu        0.68  0.64      0.71        0.40     0.42     0.98      0.10
+bag3      0.62  0.66      0.38        0.26     0.95     0.86      0.59
+drop4     0.69  0.76      0.39        0.99     0.96     0.92      0.98
+aft       0.90  0.90      0.87        0.97     0.95     1.00      0.99
+aftd6     0.85  0.87      0.86        0.96     1.00     0.98      1.00
+clf+aft   1.00  1.00      0.84        1.00     0.89     1.00      0.96
+
+average precision
+method   plain   wear  complete  instrument  cluster  ho-wear  ho-usage
+cand                                                                   
+base     0.532  0.539     0.775       0.530    0.284    0.336     0.274
+nos122   0.534  0.543     0.772       0.534    0.294    0.347     0.274
+ipcw     0.530  0.536     0.795       0.532    0.304    0.294     0.240
+pu       0.527  0.532     0.792       0.528    0.289    0.322     0.261
+bag3     0.539  0.547     0.776       0.538    0.308    0.339     0.274
+drop4    0.541  0.549     0.774       0.541    0.309    0.352     0.281
+aft      0.532  0.539     0.785       0.532    0.295    0.356     0.299
+aftd6    0.532  0.541     0.782       0.532    0.298    0.338     0.296
+clf+aft  0.540  0.548     0.783       0.540    0.302    0.357     0.287
+
+backtest on candidates that were WORSE than v12 on the public board (nos122, ipcw, pu, bag3, drop4): how many does each method also call worse?
+  plain        calls worse 1/5; mean predicted change -0.02%; correlation with public size -0.74; says aft -3.15%
+  wear         calls worse 1/5; mean predicted change -0.03%; correlation with public size -0.79; says aft -3.31%
+  complete     calls worse 2/5; mean predicted change -1.05%; correlation with public size +0.01; says aft -2.38%
+  instrument   calls worse 2/5; mean predicted change -0.63%; correlation with public size +0.47; says aft -5.39%
+  cluster      calls worse 1/5; mean predicted change -2.88%; correlation with public size -0.33; says aft -4.22%
+  ho-wear      calls worse 1/5; mean predicted change -1.10%; correlation with public size +0.16; says aft -11.77%
+  ho-usage     calls worse 3/5; mean predicted change +1.06%; correlation with public size -0.09; says aft -5.10%

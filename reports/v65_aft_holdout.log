@@ -1,0 +1,22 @@
+hold-out: 11200 vehicles, 79 failures
+    model     AP    AUC    wAP  logloss  wear_cost  plain_cost  cost_lam1
+ clf base 0.5728 0.9845 0.5745   0.0148     1.0348      0.7453     0.7573
+  clf all 0.5692 0.9838 0.5719   0.0149     1.0322      0.7284     0.7547
+   aft s1 0.5746 0.9838 0.5783   0.0148     1.0134      0.7296     0.7464
+   aft s2 0.5820 0.9850 0.5855   0.0145     1.0372      0.7454     0.7612
+   aft d6 0.5516 0.9839 0.5532   0.0147     0.9668      0.6978     0.7054
+aft seed7 0.5776 0.9840 0.5811   0.0148     1.0368      0.7458     0.7568
+  aft ens 0.5787 0.9840 0.5825   0.0146     1.0066      0.7253     0.7440
+clf + aft 0.5699 0.9843 0.5728   0.0146     1.0233      0.7373     0.7478
+clf base   wear-cost vs clf base +0.00%  bootstrap p(better) 0.00
+clf all    wear-cost vs clf base -0.25%  bootstrap p(better) 0.64
+aft s1     wear-cost vs clf base -2.06%  bootstrap p(better) 0.76
+aft s2     wear-cost vs clf base +0.23%  bootstrap p(better) 0.49
+aft d6     wear-cost vs clf base -6.56%  bootstrap p(better) 1.00
+aft seed7  wear-cost vs clf base +0.20%  bootstrap p(better) 0.50
+aft ens    wear-cost vs clf base -2.72%  bootstrap p(better) 0.85
+clf + aft  wear-cost vs clf base -1.11%  bootstrap p(better) 0.66
+test aft ens    mean q 0.0209; Spearman with v12 0.905; top-1433 overlap with v12 1352
+test aft d6     mean q 0.0205; Spearman with v12 0.875; top-1433 overlap with v12 1342
+test clf + aft  mean q 0.0203; Spearman with v12 0.927; top-1433 overlap with v12 1359
+test clf base   mean q 0.0198; Spearman with v12 0.924; top-1433 overlap with v12 1358

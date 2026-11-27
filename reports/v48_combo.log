@@ -1,0 +1,13 @@
+                                mean_%    se  better_of_10  worst_%
+variant                                                            
+drop exp+s129+s023               -4.93  0.79             9     0.01
+drop exp+s129+s023 + blend 0.8   -4.79  0.72            10    -0.14
+drop exp+s129                    -3.09  0.55            10    -0.62
+drop exp+s023                    -2.83  0.56            10    -0.08
+drop s129+s023                   -2.50  0.81             8     1.78
+drop exposure                    -1.39  0.29            10    -0.11
+drop exp + blend 0.8             -1.37  0.89             8     3.27
+drop s129                        -1.11  0.61             6     1.35
+drop s023                        -0.56  0.51             8     2.72
+base (v42)                        0.00  0.00             0     0.00
+blend 0.8                         0.42  0.77             4     5.31

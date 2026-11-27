@@ -1,0 +1,11 @@
+done cox
+done aft_normal
+done aft_logistic
+            model  wear_cv_cost  d_vs_base     se  better  extrap_cost  extrap_AP  extrap_AUC
+       aft_normal        1.1479    -0.0174 0.0101      11       5.9447     0.3708      0.9185
+  base+aft_normal        1.1588    -0.0065 0.0074      10       5.9958     0.3646      0.9163
+             base        1.1653     0.0000 0.0000       0       6.3372     0.3405      0.9082
+base+aft_logistic        1.1675     0.0022 0.0073       7       6.2295     0.3393      0.9105
+     aft_logistic        1.1709     0.0056 0.0128       6       6.3502     0.3182      0.9080
+         base+cox        1.1930     0.0277 0.0140       4       7.0376     0.3411      0.9108
+              cox        1.6130     0.4477 0.0461       0       9.3928     0.0838      0.8042

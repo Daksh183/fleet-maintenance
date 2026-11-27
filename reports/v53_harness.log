@@ -1,0 +1,98 @@
+precomputed
+re-weighted 0 of 3520
+re-weighted 500 of 3520
+re-weighted 1000 of 3520
+re-weighted 1500 of 3520
+re-weighted 2000 of 3520
+re-weighted 2500 of 3520
+re-weighted 3000 of 3520
+re-weighted 3500 of 3520
+v53: log-evidence of the public scores -183.684, best truth log-lik -190.493
+3520 truths; top 15:
+  R     w    z   c    b  alpha  fl0      a     R2    w2   z2  c2       ll    wt
+fix 1.000 s122 0.4 1.15   1.00  0.0  1.217    v12 0.000 none 0.0 -190.493 0.001
+fix 1.000 s122 0.8 1.00   1.00  0.0  0.017    v12 0.000 none 0.0 -190.545 0.001
+fix 1.000 s122 0.8 1.00   1.15  0.0 -0.150    v12 0.000 none 0.0 -190.605 0.001
+fix 0.750 s122 1.0 1.00   1.15  0.0 -0.617    v12 0.000 none 0.0 -190.637 0.001
+fix 1.000 s122 0.4 1.15   1.15  0.0  1.000    v12 0.000 none 0.0 -190.644 0.001
+fix 1.000 s149 0.4 1.15   1.00  0.0  1.317    v12 0.000 none 0.0 -190.658 0.001
+map 1.000 s122 0.4 1.15   1.00  0.0  1.267    v12 0.000 none 0.0 -190.665 0.001
+fix 1.000 s122 1.2 1.00   1.15  0.0 -0.767    v12 0.000 none 0.0 -190.666 0.001
+map 0.750 s122 1.0 1.00   1.15  0.0 -0.500    v12 0.000 none 0.0 -190.684 0.001
+fix 1.000 s126 0.4 1.15   1.00  0.0  1.167    v12 0.000 none 0.0 -190.687 0.001
+fix 0.333 s122 1.0 1.00   1.15  0.0 -0.600    map 0.333 none 0.0 -190.689 0.001
+fix 0.333 s122 1.0 1.00   1.15  0.0 -0.567 nos122 0.333 none 0.0 -190.702 0.001
+map 1.000 s122 0.8 1.00   1.00  0.0  0.267    v12 0.000 none 0.0 -190.721 0.001
+fix 0.250 s122 1.0 1.00   1.15  0.0 -0.567    map 0.250 none 0.0 -190.721 0.001
+map 0.750 s122 1.0 1.00   1.00  0.0 -0.150    v12 0.000 none 0.0 -190.724 0.001
+  posterior over R: {'ens10': 0.037, 'ens4': 0.036, 'fix': 0.285, 'fix120': 0.076, 'map': 0.232, 'nodrift': 0.128, 'nos122': 0.141, 'pu': 0.022, 'pu_x2': 0.022, 'v12': 0.02}
+  posterior over w: {0.0: 0.02, 0.25: 0.201, 0.3333333333333333: 0.192, 0.5: 0.312, 0.75: 0.091, 1.0: 0.184}
+  posterior over R2: {'fix120': 0.163, 'map': 0.047, 'nodrift': 0.062, 'nos122': 0.121, 'v12': 0.607}
+  posterior over w2: {0.0: 0.607, 0.25: 0.201, 0.3333333333333333: 0.192}
+  posterior over z: {'none': 0.021, 's120': 0.062, 's122': 0.721, 's126': 0.098, 's149': 0.098}
+  posterior over c: {0.0: 0.021, 0.4: 0.139, 0.6: 0.102, 0.8: 0.462, 1.0: 0.1, 1.2: 0.119, 1.6: 0.056}
+  posterior over z2: {'none': 0.677, 's120': 0.034, 's126': 0.132, 's149': 0.157}
+  posterior over c2: {0.0: 0.677, 0.4: 0.203, 0.8: 0.12}
+  posterior over b: {0.85: 0.086, 1.0: 0.564, 1.15: 0.35}
+  posterior over alpha: {1.0: 0.267, 1.15: 0.349, 1.3: 0.285, 1.45: 0.099}
+2802 truths carry the posterior
+nos122 truths: 695 carrying 0.266 of the posterior
+posterior-expected score on a random 30% of test: v20_cap               14984
+posterior-expected score on a random 30% of test: v33_gp_budget         14652
+posterior-expected score on a random 30% of test: v35_combo             13915
+posterior-expected score on a random 30% of test: v37_bayes_gp2         13700
+posterior-expected score on a random 30% of test: v42_gp_bands          13627
+posterior-expected score on a random 30% of test: v51_gp_reduced        13546
+posterior-expected score on a random 30% of test: BAYES_lv1_b1          13546
+posterior-expected score on a random 30% of test: BAYES_nos122          13566
+posterior-expected score on a random 30% of test: BAYES_nosprior        13549
+
+95 candidates, posterior-expected PRIVATE cost vs v20_cap (negative = better); worst/best over the 20 heaviest truths:
+                                           cand  flags  differ  d_private  worst_top20  best_top20  frac_better
+                                   BAYES_lv1_b1   1428     383    -3356.5      -2329.7     -3771.1          1.0
+                                 v51_gp_reduced   1433     378    -3355.7      -2327.0     -3767.0          1.0
+                                 BAYES_nosprior   1426     383    -3350.4      -2273.8     -3775.7          1.0
+    T_map0.25+nodrift0.25_s1221+none0_b1_al1.15   1428     385    -3312.0      -2198.7     -3853.6          1.0
+                                   BAYES_nos122   1414     397    -3310.3      -2101.3     -3772.0          1.0
+ T_map0.25+nos1220.25_s1220.8+s1490.4_b1_al1.15   1440     371    -3300.7      -2295.2     -3775.3          1.0
+ T_fix0.33+nos1220.33_s1220.8+s1490.4_b1_al1.15   1433     382    -3297.3      -2292.0     -3813.7          1.0
+     T_map0.25+nos1220.25_s1221+none0_b1_al1.15   1450     363    -3293.0      -2195.4     -3817.0          1.0
+T_map0.33+nos1220.33_s1220.6+none0_b1.15_al1.15   1415     390    -3291.8      -2362.9     -3722.1          1.0
+    T_fix0.25+map0.25_s1220.8+s1490.4_b1_al1.15   1436     371    -3290.1      -2312.7     -3805.6          1.0
+        T_fix0.25+map0.25_s1221+none0_b1_al1.15   1444     367    -3288.2      -2250.8     -3853.2          1.0
+     T_fix0.33+nos1220.33_s1221+none0_b1_al1.15   1440     375    -3285.1      -2174.1     -3854.6          1.0
+T_fix0.33+nos1220.33_s1220.6+none0_b1.15_al1.15   1442     365    -3280.0      -2372.7     -3724.1          1.0
+        T_fix0.5+v120_s1220.8+s1490.4_b1_al1.15   1451     358    -3278.6      -2316.8     -3804.2          1.0
+  T_map0.33+nodrift0.33_s1220.6+none0_b1_al1.15   1449     364    -3277.3      -2406.1     -3693.5          1.0
+       T_fix0.5+v120_s1220.6+none0_b1.15_al1.15   1413     386    -3271.9      -2368.3     -3749.9          1.0
+    T_fix0.33+map0.33_s1220.8+s1490.4_b1_al1.15   1432     379    -3271.5      -2329.8     -3841.2          1.0
+  T_fix0.33+nodrift0.33_s1220.6+none0_b1_al1.15   1407     398    -3271.4      -2336.1     -3711.8          1.0
+            T_fix0.5+v120_s1221+none0_b1_al1.15   1457     354    -3271.1      -2249.5     -3843.6          1.0
+     T_fix0.25+nos1220.25_s1221+none0_b1_al1.15   1463     354    -3269.9      -2186.8     -3812.3          1.0
+       T_map0.5+v120_s1220.6+none0_b1.15_al1.15   1424     377    -3265.2      -2380.9     -3694.2          1.0
+ T_map0.33+nos1220.33_s1220.8+s1490.4_b1_al1.15   1388     417    -3259.8      -2196.6     -3773.7          1.0
+        T_map0.5+v120_s1220.8+s1490.4_b1_al1.15   1406     395    -3259.0      -2246.6     -3755.2          1.0
+     T_map0.33+nos1220.33_s1221+none0_b1_al1.15   1402     409    -3258.1      -2107.2     -3819.5          1.0
+        T_fix0.33+map0.33_s1221+none0_b1_al1.15   1399     410    -3257.9      -2195.9     -3880.3          1.0
+
+reference files:
+          cand  flags  differ  d_private  worst_top20  best_top20  frac_better
+  BAYES_lv1_b1   1428     383    -3356.5      -2329.7     -3771.1          1.0
+BAYES_nosprior   1426     383    -3350.4      -2273.8     -3775.7          1.0
+  BAYES_nos122   1414     397    -3310.3      -2101.3     -3772.0          1.0
+  v42_gp_bands   1452     363    -3168.6      -2114.8     -3558.9          1.0
+ v37_bayes_gp2   1435     384    -2996.4      -2067.8     -3458.0          1.0
+     v35_combo   1456     363    -2494.6      -1557.1     -2974.7          1.0
+     v29_bayes   1459     358    -1740.1       -687.3     -2183.2          1.0
+ v32_bayes_nos   1456     363    -1710.7       -600.9     -2165.9          1.0
+     v28_bayes   1505     294    -1686.3       -929.0     -1975.1          1.0
+v28_bayes_lv12   1590     245    -1398.6       -901.1     -1696.5          1.0
+   v35_gpflags   1768     117    -1039.5       -471.4     -1240.9          1.0
+    v35_v33cap   1780      59     -943.5       -331.2     -1087.4          1.0
+ v33_gp_budget   1780      59     -776.5       -164.2      -920.5          1.0
+    v22_nos122   1782     221      -14.0        109.0      -210.2          0.6
+       v20_cap   1761       0        0.0          0.0         0.0          0.0
+    v12_robust   1761       0      130.8        130.8       130.8          0.0
+      v25_tilt   1761     144      161.2        574.4      -161.9          0.1
+        v24_pu   1761     172      537.6        932.8       515.5          0.0
+wrote submission_BAYES_lv1_b1.csv: flagged 7.14% of test vehicles (1428)

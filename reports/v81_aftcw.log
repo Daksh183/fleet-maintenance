@@ -1,0 +1,5 @@
+hold-out v12-style classifier     AP 0.5688  cost/veh 0.7494 (+0.0% vs classifier)
+hold-out AFT unweighted           AP 0.5739  cost/veh 0.7360 (-1.8% vs classifier)
+hold-out AFT sqrt-cost weighted   AP 0.5521  cost/veh 0.7445 (-0.7% vs classifier)
+hold-out both AFT (logit avg)     AP 0.5657  cost/veh 0.7340 (-2.1% vs classifier)
+test spearman aftcw vs aft 0.969 | vs v12 0.9

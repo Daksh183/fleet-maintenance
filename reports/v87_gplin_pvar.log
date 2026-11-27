@@ -1,0 +1,7 @@
+OOF R2 0.8450 (v51 C 0.8385); test corr with v51 0.8609; predictive sd: train OOF median 0.872, test median 0.998, test 90th pct 1.477
+standardised residual: corr(|r|, sd) on OOF -0.017
+wrote submission_v87_gppvar.csv: flagged 7.11% of test vehicles (1422)
+vs v51: 53 flags differ; common flags budget median ratio 0.906, mean 684 vs 666; vs v82_hedge flags differ 40
+expected public-scale cost under the NEW cost model: v51_gp_reduced      14225
+expected public-scale cost under the NEW cost model: v82_hedge           14217
+expected public-scale cost under the NEW cost model: v87_gppvar          13971

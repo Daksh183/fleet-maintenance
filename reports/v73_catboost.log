@@ -1,0 +1,6 @@
+hold-out v12-style classifier   AUC 0.9846  AP 0.5688  failures in top 7% 78/79
+hold-out catNO                  AUC 0.9811  AP 0.5250  failures in top 7% 77/79
+hold-out aft ens                AUC 0.9841  AP 0.5779  failures in top 7% 78/79
+hold-out catNO+aft (1:3)        AUC 0.9831  AP 0.5567  failures in top 7% 78/79
+hold-out catNO+aft (1:1)        AUC 0.9825  AP 0.5545  failures in top 7% 78/79
+test: spearman catNO vs v12 0.576 | catNOaft vs aft 0.968

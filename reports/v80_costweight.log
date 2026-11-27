@@ -1,0 +1,39 @@
+clusters: dev share / test share / failures: [(0.1, 0.12, 172), (0.08, 0.08, 1), (0.33, 0.33, 64), (0.03, 0.03, 9), (0.17, 0.16, 68), (0.09, 0.09, 3), (0.12, 0.11, 0), (0.08, 0.08, 1)]
+ho-wear train failures 24, scored 8961 vehicles with 294 failures
+ho-usage train failures 25, scored 8960 vehicles with 293 failures
+/Users/vaibhavsahni/Documents/fleet-maintenance/.venv/lib/python3.9/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+fits done
+
+cost change vs v12 classifier, % (negative = better)
+method     plain  wear  complete  instrument  cluster  ho-wear  ho-usage
+cand                                                                    
+base        0.00  0.00      0.00        0.00     0.00     0.00      0.00
+cw05       -0.52 -0.69      0.48       -1.28    -0.43    -4.18      1.08
+cw1         5.86  5.44      2.35        3.96    -5.14    15.93      0.08
+aft        -3.15 -3.31     -2.38       -5.39    -4.22   -11.77     -5.10
+aftcw05    -5.00 -5.07     -4.65       -7.19    -4.18    -5.26     -6.09
+aft+aftcw  -3.77 -3.86     -3.13       -5.99    -4.38    -8.06     -4.97
+base+cw05  -1.30 -1.51     -0.52       -1.19     0.15    -1.53      0.83
+
+bootstrap probability of beating v12
+method     plain  wear  complete  instrument  cluster  ho-wear  ho-usage
+cand                                                                    
+base        0.00  0.00      0.00        0.00     0.00     0.00      0.00
+cw05        0.66  0.70      0.42        0.85     0.51     0.94      0.26
+cw1         0.00  0.00      0.16        0.04     0.87     0.10      0.46
+aft         0.90  0.90      0.87        0.97     0.95     1.00      0.99
+aftcw05     1.00  1.00      0.98        1.00     0.94     0.92      1.00
+aft+aftcw   1.00  1.00      0.88        1.00     0.96     1.00      1.00
+base+cw05   0.86  0.92      0.56        0.89     0.46     1.00      0.25
+
+average precision
+method     plain   wear  complete  instrument  cluster  ho-wear  ho-usage
+cand                                                                     
+base       0.532  0.539     0.775       0.530    0.284    0.336     0.274
+cw05       0.514  0.520     0.766       0.512    0.290    0.331     0.283
+cw1        0.494  0.500     0.739       0.492    0.255    0.302     0.295
+aft        0.532  0.539     0.785       0.532    0.295    0.356     0.299
+aftcw05    0.531  0.537     0.780       0.531    0.316    0.333     0.306
+aft+aftcw  0.535  0.542     0.785       0.535    0.308    0.345     0.305
+base+cw05  0.529  0.536     0.777       0.529    0.293    0.337     0.278

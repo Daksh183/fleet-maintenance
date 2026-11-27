@@ -1,0 +1,14 @@
+
+v51 cost model: expected public-scale cost, change vs v51
+                  all  other clf  survival  catboost
+v51_gp_reduced    0.0        0.0       0.0       0.0
+v66_aft          -9.0        2.0     -36.0     -36.0
+v82_hedge       -11.0       -4.0     -26.0     -42.0
+v87_gppvar      226.0      229.0     224.0     200.0
+
+v87 cost model: expected public-scale cost, change vs v51
+                  all  other clf  survival  catboost
+v51_gp_reduced    0.0        0.0       0.0       0.0
+v66_aft          -3.0        8.0     -28.0     -28.0
+v82_hedge        -8.0       -0.0     -22.0     -38.0
+v87_gppvar     -254.0     -250.0    -259.0    -279.0

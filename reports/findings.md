@@ -599,3 +599,386 @@ Literal leave-one-out (56,000 XGBoost fits) is impractical. Its practical stand-
 - logit q20 = 1.035 · logit q5 + 0.020: a small affine change in logit, which the harness's fitted level a and slope b (grid 0.85 / 1 / 1.15) absorb.
 - Share of test above p = 0.05: 5.21% vs 5.37%.
 - **Conclusion:** 5-fold calibration is adequate, and the v29 / v32 decisions are unaffected.
+
+## v35: Daksh's Gaussian-process budgets combined with our flags (27 Nov, deadline day)
+
+**Leaderboard 27 Nov:** we are 9th at 16,587.75 (Daksh's v33_gp_budget). Six teams sit between 15,750 and 15,930.
+
+**Gaussian-process repair-cost model (Daksh's v33, refit in `src/v35_gp.py`).**
+- Out-of-fold R² 0.814 vs 0.798 for the tree, on the same 383 failures. Correlation with the tree on test is only 0.84.
+- Budget loss at the newsvendor level (q = 0.909, OOF): **GP 18.7 vs tree 24.1 (−22%)**. GP/tree blends land in between, so budgets use the GP only.
+- v33's actual public gain over the v12-like files (16,588 vs 16,826) supports the GP budgets.
+
+**Candidates (`src/v35_build.py`)**
+- `v35_v33cap`: v33 with its 7 budgets above 8,000 capped.
+- `v35_gpflags`: v33's k=3 rule with GP costs in the flag decision too (1,768 flags; 136 differ from v33).
+- `v35_combo`: harness flags (v32_bayes_nos, 1,456) with GP newsvendor budgets from the harness's risk estimates, × the posterior-mean cost level 1.194, capped at 8,000.
+
+**Harness-expected score on a random 30% (`src/v35_eval.py`), with three repair-cost truths (vs v33_gp_budget):**
+
+| file | tree truth | GP truth | 50/50 mix |
+|---|---|---|---|
+| v35_combo | −677 | **−661 (best)** | **−669 (best)** |
+| v32_bayes_nos | −1,168 | −122 | −645 |
+| v35_gpflags | −46 | −115 | −80 |
+| v35_v33cap | −72 | −72 | −72 |
+
+Each truth favours budgets built from its own cost model. v35_combo is the only file that is strong under all three, and the public evidence (v33 beating the tree-budget files) favours the GP truth. **v35_combo is the recommended final.** Its public score is likely about 16,950 (v29's 17,196 minus about 240 from GP budgets), because the public 30% has favoured v12-like flags all along.
+
+**v35_combo public: 16,878** (predicted about 16,950). That is 318 better than v29 (same flags, tree budgets: 17,196), so the GP budgets carry over to our flags, and 290 behind v33 (16,588) because of the flags.
+
+## v36–v37: more hypotheses in the style of Daksh's v33, and the harness on GP costs (27 Nov)
+
+**Repair-cost side (`src/v37_costvar.py`, honest 5-fold OOF on the 397 failures).**
+
+| GP inputs | R² | budget loss q=.909 | q=.5 | expected budget loss over the flagged-test level mix |
+|---|---|---|---|---|
+| v33: 6 histograms + usage | 0.814 | 18.67 | 41.08 | baseline |
+| + wear group (log s126, s149, s123) | 0.829 | 18.58 | 39.22 | −2.6% |
+| + top-6 non-histogram cost sensors (s049, s116, s142, s105, s010, s104) | 0.816 | 17.38 | 39.45 | −5.8% |
+| **+ wear + sensors (v37)** | **0.832** | 18.18 | **37.48** | **−4.6%** |
+| kNN-15 on histogram shapes | 0.687 | 31.18 | 54.91 | n/a |
+
+- Blends with kNN or the tree do not help.
+- All added sensors are stable between depots (KS ≤ 0.032).
+- On test, v37 predicts lower costs than v33's GP only in the low-wear bulk (mean log cost 5.48 vs 5.87, now in line with the tree's 5.47). On flagged vehicles they agree (5.83 vs 5.79), and only 0.1% of flagged test vehicles are more worn than any training failure.
+
+**Failure side (`src/v37_riskkernel.py`).** A histogram-kernel failure model (Nyström RBF features + logistic regression) is far worse than XGBoost (+0.73 per vehicle alone), and every blend hurts (+0.11 to +0.28). XGBoost stays the failure model.
+
+**v36 harness: GP cost truth, 24 public scores (`src/v36_harness.py`).** Adds v32_hist_kernel, v33_gp_budget and v35_combo. The posterior barely moves: s122 tilt c≈0.8, fix/map-led blends, α 1.15–1.3.
+- With v33's GP costs: joint Bayes flags + budgets 13,673 on a random 30% vs v35_combo 13,746 and v33 14,433.
+- **With v37's GP costs (`GPNPZ=reports/v37_gp.npz`): joint Bayes 13,393 vs v35_combo 13,644 and v33 14,417.** It is better than v33 under all 20 heaviest truths. These numbers judge budgets under the same cost model that built them, so they favour it somewhat.
+- **`submission_v37_bayes_gp2.csv`**: 1,435 flags. Next upload to test.
+
+**v37_bayes_gp2 public: 16,410**, our best so far: −178 vs v33 (16,588) and −468 vs v35_combo (16,878). The prediction was 16,600–16,700.
+
+## v38: per-vehicle GP uncertainty, and the harness with 25 scores (27 Nov)
+
+- **Per-vehicle GP uncertainty (Daksh's v34 idea) on the v37 GP (`src/v38_gpsigma.py`).** OOF sigma barely tracks the actual errors (corr(|resid|, sigma) 0.05). Budgets built on it lose +2.3% more over the flagged-test level mix (+0.5% with a damped version). Rejected, as in Daksh's holdout check.
+- **Harness with 25 public scores and v37 GP costs (`src/v38_harness.py`).** The posterior is stable: s122 tilt c ≈ 0.8, fix/map blends, α shifted slightly up (1.3: 34%). The re-derived joint decision (1,445 flags) is within 8 of v37_bayes_gp2 in expected private cost (−2,966 vs −2,957 vs v20_cap). **The loop has converged on v37_bayes_gp2; a re-derived file would not be worth an upload.**
+
+## v39: richer cost-model inputs (27 Nov)
+
+- **A. Greedy sensor search (`src/v39_costsearch.py`).** 20-sensor pool; a move is kept only if it cuts the flagged-mix budget loss by > 1%. Selected sensors: **s116, s142, s105, s104, s078** (s078 added, s049 and s010 removed). Loss −4.6% on the search split, **−3.1% on an independent fold seed**. OOF R² 0.835 (v37: 0.832). s078 KS 0.023.
+- **B. Cost-5 floor.** 27 of 397 failures cost exactly 5. The v37 GP already separates them (AUC 0.986; mean predicted log cost 2.0 vs 5.3), so their budgets are already near the floor. No two-part model needed.
+- **Candidate `submission_v39_bayes_gp3.csv`** (v38 posterior, v39 GP costs; 28 flags differ from v37). Cross-evaluated under three GP cost truths, vs v37_bayes_gp2: **+1 (v33 GP), +47 (v37 GP), −58 (v39 GP)**. Each truth favours its own budgets, and the net is a wash. **The 3% budget-loss gain is too small to show up in expected cost; v37_bayes_gp2 stays our best file.** Cost-model tuning is exhausted at this level.
+- **Consistency check.** Under the v33-GP truth, v35_combo would beat v37 by 173. On public, v37 beat v35_combo by 468, so the v37 cost model is closer to the truth than v33's.
+
+## v40: three more hypotheses (27 Nov), all rejected
+
+- **H1: failure model trained on a test-like fleet** (training rows weighted by the test/train density ratio of log s126; `src/v40_wearw.py`, shift-aware CV). It is worse than unweighted: no-s122 −0.061 / −0.019 vs no-s122 weighted −0.042 / −0.000 (instrument / real); all-sensors weighted −0.012 / +0.003.
+- **H2: repair-cost level tilting with wear at the new depot** (cost × α × exp(d·z_s126); 150 heaviest truths, α ∈ {1.15, 1.3}; `src/v40_costtilt.py`). Posterior over d: −0.3 1.5%, −0.15 27%, **0 51%**, +0.15 20%, +0.3 0.7%. The best fit is at d = 0, so there is no wear-dependent cost shift.
+- **H3: flag-count and budget-size scan** (harness level × budget-scale grid under GP costs, `reports/v38_cands.csv`). The joint decision at level 1, budget ×1 is best. Level 0.85–1.2 and budget 0.9–1.15 lose 100–1,200 in expected private cost, so v37 sits at the optimum on both.
+
+## v41: variants of the no-s122 failure model (27 Nov)
+
+Shift-aware CV, one scenario (the model does not read s120/s122). Cost per vehicle vs the no-s122 model with v12 params (`src/v41_nosvar.py`):
+
+| variant | Δ cost/veh | better |
+|---|---|---|
+| **slow (1,000 trees, lr .02, colsample .5)** | **−0.0155 ± 0.0071** | 11/15 |
+| 5-seed bag | −0.0155 ± 0.0103 | 8/15 |
+| + GP predicted log cost as a feature | −0.0024 ± 0.0093 | 6/15 |
+| LightGBM | −0.0003 | 7/15 |
+| L2/gamma regularised | +0.0041 | 6/15 |
+| depth 6, min_child_weight 5 | +0.0063 | 7/15 |
+| depth 3, 600 trees | +0.0185 | 7/15 |
+| CatBoost | +0.0218 | 5/15 |
+
+**Slow no-s122 as a harness ranking (`src/v41_slow_q.py`, `src/v41_harness.py`).** Test Spearman vs no-s122 is 0.893. Each truth using no-s122 was duplicated with nos_slow and re-weighted on 25 public scores. The two get equal weight (20.0% vs 20.5%), so the public scores cannot tell them apart. The re-derived joint decision is within 9 of v37_bayes_gp2 (−2,997 vs −2,989). No new file is worth an upload.
+
+## v42: repair-cost spread by predicted-cost band, plus the v39 sensor set (27 Nov)
+
+**Course announcement (26 Nov 22:47):** do not retrain at the last minute, save artifacts, make inference reproducible. Our competition takes CSV uploads, so nothing runs on Kaggle at the deadline. Every v37/v42 input is saved in `reports/` (GP predictions and residuals, harness posterior, ranking probabilities), so the files rebuild without retraining.
+
+**Banded residual spread (`src/v42_residbins.py`).** Budget quantiles come from OOF residuals of failures in the same predicted-log-cost band, instead of one pooled set. Honest cross-fitted check (band quantiles estimated on the other folds' failures), budget loss over the flagged-test level mix vs pooled:
+
+| | 2 bands | **3 bands** | 4 bands |
+|---|---|---|---|
+| fold seed 42 | −0.1% | **−3.5%** | −1.7% |
+| fold seed 7 | −1.2% | **−3.1%** | −2.2% |
+
+**Combined with the v39 sensor set (`src/v42b_combined.py`)**, vs the v37 GP with pooled residuals, honest:
+
+| fold seed | v37 + 3 bands | v39 pooled | **v39 + 3 bands** |
+|---|---|---|---|
+| 42 | −3.5% | −4.0% | **−7.9%** |
+| 7 | −3.1% | −3.1% | **−6.6%** |
+| 123 (unused for any choice) | −2.2% | −4.8% | **−6.2%** |
+
+The two gains stack. Budget loss is about 12,300 over the full test, so −6 to −8% is roughly −850 over the full test: about −250 on a 30% scale and −600 on private.
+
+**`submission_v42_gp_bands.csv`.** Harness joint decision under v39-GP costs with 3-band spread (`BANDS=3 GPNPZ=reports/v39_gp.npz python src/v38_harness.py --reuse BAYES_lv1_b1`, from the saved v38 posterior). It has 1,452 flags (35 differ from v37) and mean budget on common flags 670 vs 644. Under its own cost truth it scores −137 vs v37 on a random 30%. The honest OOF budget check is the better evidence and points to about −250. Next upload to test.
+
+**v42_gp_bands public: 16,487** (+77 vs v37's 16,410). Under the model, the public difference between v42 and v37 has sd ≈ 453 (private ≈ 690), because the files differ mainly in budgets, which only the few failing public vehicles feel. So +77 is z ≈ 0.1: public cannot distinguish them. The honest OOF budget evidence (−6 to −8% on 3 seeds) still favours v42 for private.
+
+## v43: other residual-spread models (27 Nov)
+
+Honest cross-fitted budget loss vs v42's 3 bands by predicted cost, three fold seeds (`src/v43_spread.py`):
+
+| spread model | seed 42 | seed 7 | seed 123 |
+|---|---|---|---|
+| pooled (v37-style) | +4.2% | +3.7% | +1.6% |
+| smooth location-scale (log\|r\| linear in predicted cost) | +2.2% | −0.1% | −2.0% |
+| 3 bands by wear (log s126) | −0.8% | +0.7% | −4.5% |
+| 3×2 bands (predicted cost × wear) | −1.1% | +1.3% | −1.3% |
+
+None beats the v42 bands consistently; differences are within ±2–4% and change sign across seeds. **v42's spread model stays.**
+
+## v44: GP kernel width and bagging (27 Nov)
+
+Honest budget loss vs v42 (v39 inputs, 3 bands), `src/v44_gpkernel.py`:
+- width ×0.5: +7.5 / +5.3 / −0.5%; ×0.75: +3.1 / +3.2 / −0.2%;
+- ×1.5: −0.1 / +0.2 / +0.1%; ×2: +0.3 / +0.4 / +0.1%;
+- 10-bootstrap bag: +30.6 / +11.0 / +6.3% (resampled duplicates distort the GP noise estimate).
+
+The median-heuristic width is already optimal, and bagging hurts. v42 is unchanged.
+
+## v45: GP repair costs in the flag decision, end-to-end check (27 Nov)
+
+Shift-aware CV with the slow no-s122 failure model (nested Platt). Flags and budgets come from each candidate's cost distribution, and the GP is refit on each training fold's failures only (`src/v45_flagmu.py`). Cost per vehicle:
+
+| cost model used for flags + budgets | cost/veh | vs tree | better |
+|---|---|---|---|
+| tree (v12) | 1.1735 | n/a | n/a |
+| **GP (v39 inputs)** | **1.1348** | **−0.039 ± 0.015 (−3.3%)** | 11/15 |
+| 50/50 log blend | 1.1466 | −0.027 ± 0.009 | 12/15 |
+
+This confirms in CV what the public scores showed: the GP cost model improves the whole decision, not just budgets. That is the direction v37 and v42 take. The blend is more consistent but smaller on average, so the GP alone stays.
+
+## v46: harness with 26 public scores (27 Nov)
+
+`src/v46_harness.py` (v38 harness, v42 repair-cost model, v42's 16,487 added). The posterior barely moves (heaviest rankings `fix`, `map`,
+`nos122`; s122 wear tilt 71%). Expected public-scale score: v42 13,697, new Bayes decision 13,693, v37 13,810. The new Bayes decision is
+v42 to within 4 points, so no new file from this step. The harness's absolute expectations run about 2,800 below the actual public scores of
+the recent files; only its differences have been of some use.
+
+## v47–v50: ablation of the GP repair-cost inputs (27 Nov)
+
+One change at a time against v42, honest cross-fitted budget loss on the same 383 failures (`src/v47_ablation.py`, 26 variants, 5 seeds):
+- necessary groups (removing them costs a lot): histograms s080 (+38%), s054 (+20%), s037 (+10%), s154 (+7%), the sensor group (+6%);
+- no better: Matern or rational-quadratic kernels, raw bin levels instead of shares, other target transforms (cost^0.25, cost^0.5), all
+  other sensors, their principal components, a missing-value count, one kernel per sensor;
+- small gains from REMOVING inputs: the usage (exposure) group, the s023 histogram, the s129 histogram.
+
+Confirmation on ten fresh fold seeds (`src/v48_combo.py`): removing all three gives **−4.9% (9/10)**; vehicle bootstrap sd 1.9%,
+97–99% of resamples better (`src/v49_round2.py`). A second backward round found one more candidate, wear sensor s123 (−2.2%, within noise).
+
+Stress tests (`src/v50_stress.py`, reduced inputs vs v42): same gain under the v37 and v12 flag mixes and 10-fold CV (−5.5%); −4.2% when
+failures are weighted to the test depot's wear; **−8.9% when trained on low-wear failures and scored on the top-wear third**.
+
+Caveat: the groups to remove were chosen using these same 383 failures. Fresh fold seeds guard against fold luck, not against selection on
+this sample, so the real gain is probably smaller than the measured one.
+
+## v51: reduced-input GP (27 Nov)
+
+`src/v51_gp_fit.py`, ten more fold seeds: A (without exposure, s023, s129) −6.1% (10/10), wear-weighted −4.7%; B (also without s123)
+−7.6% / −6.9%; **C (average of A and B in log cost) −7.4% / −6.4% (10/10)**. C is used (less dependence on the last, weakest choice).
+On test it correlates 0.994 with v42's costs (mean log shift +0.017, sd 0.10). `src/v51_harness.py` makes the joint decision under C.
+
+## v51 harness, v52 end-to-end check (27 Nov)
+
+**`submission_v51_gp_reduced.csv`**: harness joint decision under the v51 C costs (`src/v51_harness.py BAYES_lv1_b1`). 1,433 flags, 27
+different from v42 (4 added, 23 removed); median budget change on common flags 11.
+
+End-to-end shift-aware CV (`src/v52_flagcv.py`, 5 repeats x 5 folds, GP refit inside each fold, 3-band spread):
+
+| GP inputs | cost/veh | vs v42 inputs | folds better |
+|---|---|---|---|
+| v42 | 1.1365 | n/a | n/a |
+| A (no exposure, s023, s129) | 1.1153 | −1.9% | 19/25 |
+| B (A without s123) | 1.1132 | −2.0% | 17/25 |
+| **C (average, used)** | **1.1121** | **−2.15%** | **18/25** |
+
+The fold standard errors (±0.008) ignore the overlap between folds and the choice of inputs on the same failures, so they overstate certainty.
+
+Public scores cannot choose between GP variants: log-evidence −177.35 (v51 C), −177.38 (v42 inputs), −176.95 (v37 inputs), against
+−179.16 for tree costs. Posterior-expected public-scale score, new file against v42: −79 if v51's costs are true, +72 if v42's are.
+Expected public difference −94 with noise sd about 290, so one public score will not settle it either.
+
+**v51_gp_reduced public: 16,388**, the best public score so far (−99 vs v42, −22 vs v37; the model expected −94 vs v42, noise sd about 290).
+The sign agrees with both CV checks, but one score of this size is not evidence on its own.
+
+## v53–v58: after the v51 upload (27 Nov)
+
+- **v53 harness, 27 public scores** (`src/v53_harness.py`): its decision matches v51 (5 flags differ, median budget change 0; expected score
+  equal to the point). Not a new file; kept in `submissions/rejected/`.
+- **v54–v56, GP settings** (`src/v54_gpsettings.py`, `v55_confirm.py`, `v56_prior.py`): optimiser iterations, amplitude bound, number of
+  bands, kernel-smoothed spread and Student-t noise give nothing or hurt. A tighter prior on the kernel amplitudes helped budget loss by
+  2 to 4%. Budgets above the honest quantile helped on training failures (about −7% at ×1.19, flat to ×1.3); the submissions already sit
+  at about ×1.14 through the harness's cost-level mixture, so no level change was made.
+- **v57, amplitude prior N(0, 0.05)** on fresh seeds (`src/v57_amp.py`): −2.9% at level ×1.0, −2.3% at ×1.19 (9/10 seeds, vehicle
+  bootstrap p ≈ 0.9).
+- **v58, end-to-end check** (`src/v58_flagcv.py`): **no gain** (+0.14% cost per vehicle, better in 9/25 folds). **v57 rejected**; v51 stays.
+
+## v59: where the cost comes from (27 Nov)
+
+Model expectation for v51 on the public 30% (13,546): inspections 32%, shortfall on flagged failures 26%, unused budget on healthy flags
+16%, missed failures 15%, unused budget on failures 12%. Under the same model, knowing every repair cost would save about 650; knowing
+which vehicles fail would save about 8,200. The cost model has little left to give; the failure ranking is the large uncertainty.
+
+## v60–v62: new failure-model features, and new rankings in the harness (all rejected)
+
+Monotone wear constraints, histogram shares, per-usage rates, rates only and logistic regression (`src/v60_feats.py`): none beats the
+base classifier in wear-reweighted CV (best alternative +0.003 per vehicle). Added to the harness as ranking hypotheses (`v61`, `v62`),
+they take modest weight and move the decision by 20 flags and 8 expected points. Not uploaded.
+
+## v63–v65: survival models for the failure ranking (27 Nov)
+
+XGBoost accelerated failure time (normal errors), `followup_days` used only as the training target; censored vehicles give a lower
+bound. Cox was much worse.
+
+| check | classifier (base) | AFT result |
+|---|---|---|
+| v63, wear CV 3x5 | 1.1653 | scale 1: 1.1479 (−1.5%, 11/15) |
+| v64, fresh folds 5x5 | 1.1888 | depth 6: −2.2% and scale 2: −2.0% (18/25, 5/5 repeats); scale 1: −0.6% |
+| v64, train low wear, score top 20% of s126 | 6.35 (AP 0.34) | all variants 5.8–6.2 (AP 0.35–0.38) |
+| v65, locked 20% hold-out (79 failures), wear-weighted | 1.0348 | ensemble −2.7% (bootstrap p 0.85); depth 6 −6.6%; scale 2 +0.2% |
+
+The hold-out was touched here once, outside the v0/v4/v8 convention, because it was the only data not used to pick the variants.
+Warning: earlier censoring-aware methods (v18 IPCW, v24 soft labels) looked good offline and lost on the public board.
+
+## v66: survival rankings in the harness (27 Nov)
+
+`src/v66_harness.py`: AFT rankings get 0.20 posterior weight from the public scores alone. `submission_v66_aft.csv` gives AFT hypotheses
+4x prior weight (0.50): 1,427 flags, 38 different from v51. Expected public-scale score: 13,594 against v51's 13,611 under that mixture,
+13,584 against 13,617 under AFT-only hypotheses. The noise of the public difference is about 350, far above the expected gain.
+
+## v67: seven validation setups, backtested against public results (27 Nov)
+
+`src/v67_valmethods.py`, 80% dev split, cost per vehicle at each candidate's own best flag level; change against the v12 classifier
+(negative is better), bootstrap probability of being better in brackets. Setups: plain 3x5 CV; wear-weighted; complete cases with
+inverse-censoring weights; test-depot sensor readings applied to validation (instrument); leave-vehicle-cluster-out; train on the lower
+80% of wear (ho-wear) or of total usage (ho-usage), score the rest.
+
+| candidate | plain | wear | complete | instrument | cluster | ho-wear | ho-usage |
+|---|---|---|---|---|---|---|---|
+| nos122 | +2.1% (0.10) | +2.1% (0.11) | -0.0% (0.47) | -0.2% (0.56) | -1.2% (0.66) | -3.3% (0.93) | +0.3% (0.40) |
+| ipcw | -0.5% (0.57) | -0.4% (0.57) | -4.3% (0.93) | -1.0% (0.66) | -6.8% (1.00) | +8.1% (0.30) | +6.5% (0.03) |
+| pu | -0.8% (0.69) | -0.5% (0.64) | -1.9% (0.71) | +0.4% (0.40) | +0.3% (0.42) | -4.4% (0.98) | +3.5% (0.10) |
+| bag3 | -0.2% (0.62) | -0.2% (0.66) | +0.4% (0.38) | +0.8% (0.26) | -3.2% (0.95) | -2.1% (0.86) | -1.0% (0.59) |
+| drop4 | -0.8% (0.69) | -1.1% (0.76) | +0.6% (0.39) | -3.1% (0.99) | -3.6% (0.96) | -3.8% (0.92) | -4.1% (0.98) |
+| aft | -3.2% (0.90) | -3.3% (0.90) | -2.4% (0.87) | -5.4% (0.97) | -4.2% (0.95) | -11.8% (1.00) | -5.1% (0.99) |
+| aftd6 | -1.9% (0.85) | -2.2% (0.87) | -2.4% (0.86) | -4.2% (0.96) | -7.8% (1.00) | -6.9% (0.98) | -6.6% (1.00) |
+| clf+aft | -2.8% (1.00) | -2.9% (1.00) | -2.1% (0.84) | -5.1% (1.00) | -2.8% (0.89) | -7.1% (0.99) | -3.5% (0.96) |
+
+Backtest on the five changes known to score worse than v12 publicly (nos122, ipcw, pu, bag3, drop4): each setup calls only 1 to 3 of the
+5 worse (ho-usage 3; complete and instrument 2). Correlation with the size of the public loss runs from -0.79 to +0.47 on four points.
+No offline setup is a reliable guide to public ranking results. The survival ensemble is ahead under all seven.
+
+Adversarial validation was dropped: after removing s120, s122 and the columns that differ only in rounding, train against test AUC is
+0.51.
+
+## v68: histogram column resolution (27 Nov)
+
+The v1 histogram realignment is right, but each column keeps its own recording resolution, so test bins arrive rounded differently
+(this alone lets a classifier tell the depots apart). Training on data rounded the same way changes the test top-1,433 less
+(1,390 shared) than a different random seed does (1,369). No change made.
+
+## v69: survival ranking replaces the classifier (27 Nov)
+
+`src/v69_aftfull.py`: 1,512 hypotheses using only survival rankings, fitted to the 27 public scores. Best public log-likelihood
+-190.425 against -190.422 for the best of all v66 hypotheses, so the public scores do not separate the two rankings.
+`submission_v69_aftfull.csv`: 1,365 flags, 120 different from v51 (26 added, 94 removed).
+
+| expected score, public 30% scale | v51 | v66 | v69 |
+|---|---|---|---|
+| survival-only hypotheses | 13,688 | 13,629 | 13,529 |
+| full v66 posterior (all rankings) | 13,607 | 13,601 | 13,741 |
+
+The model's expectations run about 2,800 below actual public scores; only the differences mean anything, and the noise of a public
+difference is a few hundred. Rebuilt exactly by `notebooks/v69_aftfull.ipynb`. Not uploaded.
+
+## v70–v71: why the public scores sit above the model, and borderline vehicles (27 Nov)
+
+`src/v70_gap.py`: under the best-fitting hypotheses all 27 uploads score above their prediction, by about +2,000 to +3,500 each (v2
++12,000). The residuals are almost perfectly correlated (GLS chi2 12.7 on 27 scores), so they amount to one shock: a few expensive
+failures in the public 30% that every file pays for. Predictive sd of one file's public score is about 1,850; v51 is expected at about
+13,450 and scored 16,388 (+1.6 sd).
+
+`src/v70_parts.py`: scaling cost components by GLS gives shortfall x1.27 and missed failures x1.23 (both ±0.2), chi2 12.7 -> 10.5.
+
+`src/v70_pairs.py` (reports/v70_pairs.csv): paired differences, which share most of the noise. v12-family files (v12, v17, v32, v33)
+beat their predictions relative to harness files by about 800; v33 vs v35 (same budget model, harness drops ~350 borderline vehicles
+with v12 p ~ 0.02 that v12 flagged at near-zero budget): predicted -885, observed +290 (1.4 sd). Files with more total budget beat
+predictions (mean z -0.41), files with less fall short (+0.71). v13_bag vs v12 is a +3.4 sd outlier.
+
+`src/v71_band.py`: hypotheses with extra failure odds for vehicles in v12 rank bands 1000–4000, fitted to all 27 scores: best
+log-lik -190.60 against -190.42 without. The public scores as a whole do not support the borderline effect; the pairs above look like a
+few failures. Train: 1,171 groups of exactly duplicated rows (2,345 rows) fail at 0.17% against 0.73%; 338 test rows are in duplicate
+groups. No id or row-order signal.
+
+## v72–v75: new model families, CatBoost rankings in the harness, hedged decision (27 Nov)
+
+`src/v72_newmodels.py` (v67 setups; cost change vs v12 classifier, %): CatBoost, LightGBM and sklearn HistGB alone all lose in most
+setups (HistGB +9 to +55%); missing-count and duplicate-row features do not help. CatBoost without s120/s122 averaged with the survival
+ensemble (catNO+aft) beats v12 in all seven: plain -4.3, wear -4.8, complete -2.4, instrument -6.5, cluster -10.6, ho-wear -9.3,
+ho-usage -4.8 (survival alone: -3.2, -3.3, -2.4, -5.4, -4.2, -11.8, -5.1).
+
+`src/v73_catboost.py`, locked hold-out (79 failures): AP v12-style 0.569, catNO 0.525, survival 0.578, catNO+aft 0.557. Not confirmed.
+On test, catNO ranks very differently from v12 (Spearman 0.58).
+
+`src/v74_harness_cat.py`: public log-lik of CatBoost-led truths -190.65 (catNO+aft) to -191.38 (catNO alone), against -190.42 best
+and -191.10 for v12 alone. The public scores cannot separate rankings that disagree this much on test.
+
+`src/v75_hedge.py`: Bayes decision over v66 and CatBoost truths (`submission_v75_hedge.csv`, 1,440 flags, 31 different from v51) and
+with equal weight per ranking family (`v75_eqfam`). Expected public-scale change against v51 under each family: v66 -7 to +21 (-34 under
+survival), v69 +38 to +326 (-5 under CatBoost), v75_hedge -41 to +9, v75_eqfam -58 to +7. All candidates are within tens of points.
+
+## v76–v77: budget scale and repair-cost level (27 Nov)
+
+`src/v76_budscale.py`: if repair costs run x1.27 above the model with failure counts unchanged, the model's expected public score for
+v75_hedge becomes 16,263 (close to actual) and budgets x1.2–1.3 save about 400; at modelled costs x1.2 loses 198.
+`src/v77_alpha.py`: extending the cost-level grid to 2.2 with the failure level refit, the public scores prefer low cost levels: best
+log-lik 1.0 -190.42, 1.3 -190.85, 1.6 -192.45, 2.0 -195.55; posterior beyond 1.45 is 5%. The data explain the level with more failures,
+not costlier ones, so the budget lever is not supported. No budget scaling.
+
+## v78–v82: audit of slope, regularisation and loss (27 Nov)
+
+- Scoring rule and labels re-checked against the problem statement: only failures carry a repair cost (max 8,000). Test vehicles are
+  not near-copies of train vehicles (the zero nearest-neighbour distances are low-usage all-zero vehicles, equally common in train).
+- `src/v78_slope.py`: confidence slope b extended to 0.4–1.6. Best public log-lik at 1.0–1.3 (-190.3 to -190.5); 0.7 -193.6, 0.55
+  -200.0. Flatter probability curves (more failures among borderline vehicles) are rejected.
+- `src/v79_regular.py` (v67 setups): 11 XGBoost regularisation variants (depth 2/3/6, slow learning, min_child_weight 10,
+  colsample 0.3, L1/L2, max_delta_step, scale_pos_weight, subsampling, gamma). None beats the current settings outside the cluster
+  setup, where every variant wins. A five-member regularised survival ensemble beats v12 in all seven (p >= 0.92), slightly ahead
+  of the three-member one in five.
+- `src/v80_costweight.py`: failures weighted by repair cost. Classifier: sqrt weighting about neutral, linear weighting worse. Survival
+  model with sqrt(cost) weights beats v12 in all seven (-4.2 to -7.2%; ho-wear -5.3) and the unweighted model in five.
+  `src/v81_aftcw.py`, locked hold-out: unweighted -1.8%, weighted -0.7%, both -2.1% (AP 0.574, 0.552, 0.566). Test Spearman with the
+  unweighted model 0.97.
+- `src/v82_harness_aftcw.py`, `v82_hedge.py`: public log-lik -190.63 to -190.88 (best overall -190.42). Hedged decisions over all
+  families (`submission_v82_hedge.csv`, `v82_eqfam`) differ from v75 by a few points; every candidate is within -59 to +21 of v51
+  under every ranking family.
+
+## v83–v84: v51's cost by component, and the repair-cost model against other learners (27 Nov)
+
+`src/v83_v51loss.py`, expected on the public 30% under the full posterior (actual 16,388):
+
+| component | expected | share |
+|---|---|---|
+| inspections (430 flags) | 4,299 | 31.5% |
+| unused budget on flagged vehicles that don't fail (~260) | 2,083 | 15.3% |
+| shortfall on flagged failures | 3,310 | 24.3% |
+| unused budget on flagged failures | 1,685 | 12.3% |
+| missed failures (~19 of ~189) | 2,269 | 16.6% |
+| total | 13,646 | |
+
+Oracles: knowing which vehicles fail 7,338; knowing each vehicle's repair cost if it fails (v51 flags) 9,681; both 1,889. (The
+earlier "~650 from knowing costs" referred to a narrower comparison.) Repair-cost uncertainty is worth about 4,000 on the public 30%.
+
+`src/v84_costens.py`, OOF on the 383 eligible training failures: v51 GP R2 0.838, budget loss 23.8; ridge 0.644 (+68%), SVR 0.642
+(+79%), kNN 0.473 (+113%), regularised XGBoost 0.716 (+56%). Every blend with the GP is worse (best: 75% GP + 25% XGBoost, +16%).
+
+## v85–v87: untested GP repair-cost refinements (27 Nov)
+
+`src/v85_gpext.py` (v54 budget loss, seeds 501–508): lengthscale multipliers fitted per input group +4.8% (worse); linear mean on the
+wear and sensor z-scores -0.4%; budgets from each vehicle's GP predictive sd within the three cost bands -3.4% (7/8), with the linear
+mean -4.7% (8/8). v54's loss leaves out the unused budget on flagged vehicles that do not fail. `src/v86_gpext_full.py` adds it:
+linear mean + predictive sd -2.4% (8/8, bootstrap p 0.78), predictive sd alone -1.5% (7/8), linear mean alone -0.3%.
+
+`src/v87_gplin_pvar.py`: refit on all failures. OOF R2 0.845 (v51 0.839), but test predictions correlate only 0.86 with v51's: the
+linear wear terms extrapolate into the test depot's higher wear. The predictive sd does not track error size (corr(|resid|, sd) on
+OOF -0.02) and is larger on test (median 1.00 against 0.87), so the CV gain has no clear mechanism and the test-side widening is
+unvalidated. `submission_v87_gppvar.csv` (1,422 flags, 53 different from v51) is expected 254 below v51 only under its own cost model.
+Not recommended.

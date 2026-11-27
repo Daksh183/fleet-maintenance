@@ -1,0 +1,15 @@
+inspections (10 each)                  4299   31.7%
+shortfall on flagged failures          3466   25.6%
+unused budget, flagged failures        1644   12.1%
+unused budget, flagged healthy         2111   15.6%
+missed failures (unflagged)            2026   15.0%
+total (model expectation)             13546; flags 1433; expected failures 619, of which flagged 560
+oracle: now                             13414
+oracle: know which vehicles fail         5172
+oracle: know every repair cost          12757
+oracle: know both                        1823
+flagged with p in [0,0.1):   447 vehicles, expected cost   2549
+flagged with p in [0.1,0.3):   297 vehicles, expected cost   2776
+flagged with p in [0.3,0.7):   289 vehicles, expected cost   2611
+flagged with p in [0.7,0.9):   261 vehicles, expected cost   2377
+flagged with p in [0.9,1.01):   139 vehicles, expected cost   1208

@@ -1,0 +1,19 @@
+648 truths
+best log-lik by ranking and weight:
+R           w  
+catNO       0.5   -191.10
+            1.0   -191.38
+catNOaft    0.5   -190.74
+            1.0   -190.65
+catNOaft50  0.5   -190.84
+            1.0   -190.89
+best of v66 truths -190.42 | v12 alone -191.1 | aft -190.42
+       R   w    z   c   z2  c2    b  alpha      a       ll
+catNOaft 1.0 s122 0.4 none 0.0 1.15   1.00  1.217 -190.646
+catNOaft 1.0 s122 0.8 none 0.0 1.00   1.00  0.067 -190.685
+catNOaft 0.5 s122 1.2 none 0.0 1.00   1.15 -0.883 -190.737
+catNOaft 1.0 s149 0.4 none 0.0 1.15   1.00  1.317 -190.797
+catNOaft 1.0 s126 0.4 none 0.0 1.15   1.00  1.317 -190.807
+catNOaft 0.5 s122 0.8 s149 0.4 1.00   1.15 -0.767 -190.815
+catNOaft 0.5 s122 0.4 none 0.0 1.15   1.00  1.100 -190.819
+catNOaft 1.0 s122 0.8 s149 0.4 1.00   1.00 -0.350 -190.835

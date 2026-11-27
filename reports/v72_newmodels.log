@@ -1,0 +1,57 @@
+clusters: dev share / test share / failures: [(0.1, 0.12, 172), (0.08, 0.08, 1), (0.33, 0.33, 64), (0.03, 0.03, 9), (0.17, 0.16, 68), (0.09, 0.09, 3), (0.12, 0.11, 0), (0.08, 0.08, 1)]
+ho-wear train failures 24, scored 8961 vehicles with 294 failures
+ho-usage train failures 25, scored 8960 vehicles with 293 failures
+/Users/vaibhavsahni/Documents/fleet-maintenance/.venv/lib/python3.9/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+fits done
+
+cost change vs v12 classifier, % (negative = better)
+method            plain  wear  complete  instrument  cluster  ho-wear  ho-usage
+cand                                                                           
+base               0.00  0.00      0.00        0.00     0.00     0.00      0.00
+xmiss             -0.47 -0.37      0.46        1.68    -5.07     3.12     -3.30
+aft               -3.15 -3.31     -2.38       -5.39    -4.22   -11.77     -5.10
+aftx              -3.08 -3.33     -2.28       -5.31    -2.58   -11.65     -5.84
+cat                3.46  2.03      5.09        1.49     2.02    -1.43     14.66
+catNO              2.41  1.71      3.92        0.04    -3.55     1.75      6.94
+lgb                2.28  2.45      3.09       -0.52   -11.16    16.77      1.66
+hgb               11.49  9.71     12.33        8.76     0.56    54.67     36.53
+gbm3              -1.63 -1.86     -2.61       -2.78   -11.65     2.12     -2.97
+cat+aft           -2.25 -2.69     -2.52       -5.11   -14.69   -11.27     -3.09
+catNO+aft         -4.32 -4.79     -2.44       -6.53   -10.55    -9.33     -4.78
+all               -1.25 -1.29     -2.12       -2.63   -12.04     1.34     -3.41
+nos122+catNO+aft  -2.64 -2.88     -1.42       -4.89   -10.11    -9.10     -3.88
+
+bootstrap probability of beating v12
+method            plain  wear  complete  instrument  cluster  ho-wear  ho-usage
+cand                                                                           
+base               0.00  0.00      0.00        0.00     0.00     0.00      0.00
+xmiss              0.73  0.68      0.36        0.12     0.99     0.04      0.96
+aft                0.90  0.90      0.87        0.97     0.95     1.00      0.99
+aftx               1.00  1.00      0.86        1.00     0.83     1.00      1.00
+cat                0.16  0.26      0.14        0.34     0.39     0.67      0.00
+catNO              0.28  0.34      0.18        0.52     0.74     0.36      0.08
+lgb                0.17  0.17      0.11        0.59     1.00     0.00      0.28
+hgb                0.01  0.01      0.00        0.02     0.44     0.00      0.00
+gbm3               0.86  0.89      0.80        0.89     1.00     0.08      0.95
+cat+aft            0.90  0.94      0.84        0.97     1.00     1.00      0.92
+catNO+aft          0.99  0.99      0.77        1.00     1.00     1.00      0.96
+all                0.86  0.86      0.84        0.93     1.00     0.20      0.98
+nos122+catNO+aft   0.96  0.98      0.61        0.99     1.00     1.00      0.91
+
+average precision
+method            plain   wear  complete  instrument  cluster  ho-wear  ho-usage
+cand                                                                            
+base              0.532  0.539     0.775       0.530    0.284    0.336     0.274
+xmiss             0.533  0.541     0.773       0.533    0.302    0.334     0.269
+aft               0.532  0.539     0.785       0.532    0.295    0.356     0.299
+aftx              0.529  0.537     0.783       0.529    0.294    0.362     0.300
+cat               0.523  0.530     0.754       0.521    0.269    0.309     0.290
+catNO             0.519  0.525     0.760       0.519    0.265    0.298     0.303
+lgb               0.533  0.541     0.776       0.527    0.316    0.289     0.251
+hgb               0.504  0.512     0.755       0.499    0.262    0.081     0.153
+gbm3              0.542  0.549     0.783       0.540    0.305    0.354     0.301
+cat+aft           0.542  0.549     0.784       0.540    0.295    0.365     0.309
+catNO+aft         0.540  0.546     0.785       0.540    0.297    0.365     0.316
+all               0.542  0.549     0.786       0.542    0.308    0.352     0.297
+nos122+catNO+aft  0.543  0.550     0.786       0.543    0.303    0.370     0.305

@@ -1,0 +1,6 @@
+A: v42-flag loss -6.13% (10/10); wear-weighted -4.68% (10/10)
+B: v42-flag loss -7.57% (10/10); wear-weighted -6.94% (10/10)
+C: v42-flag loss -7.37% (10/10); wear-weighted -6.41% (10/10)
+A: seed-42 OOF R2 0.8399 (v42 0.8354); resid sd 0.656; test: corr with v39 0.9941, mean shift +0.0485, sd 0.099
+B: seed-42 OOF R2 0.8359 (v42 0.8354); resid sd 0.664; test: corr with v39 0.9907, mean shift -0.0139, sd 0.128
+C: seed-42 OOF R2 0.8385 (v42 0.8354); resid sd 0.658; test: corr with v39 0.9938, mean shift +0.0173, sd 0.103

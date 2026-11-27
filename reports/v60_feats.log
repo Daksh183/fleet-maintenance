@@ -1,0 +1,17 @@
+/Users/vaibhavsahni/Documents/fleet-maintenance/.venv/lib/python3.9/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+extrapolation set: 8862 vehicles, 294 failures (train: 24 failures)
+           model  wear_cv_cost  d_vs_base     se  better  extrap_cost  extrap_AP  extrap_AUC
+            base        1.1653     0.0000 0.0000       0       6.3372     0.3405      0.9082
+        all+base        1.1687     0.0034 0.0039       6       6.2979     0.3385      0.9098
+      base+rates        1.1690     0.0037 0.0089       7       6.9276     0.3531      0.9111
+       base+logU        1.1751     0.0098 0.0059       6       6.3232     0.3424      0.9087
+base+mono+shares        1.1771     0.0118 0.0086       6       6.8345     0.3523      0.9106
+             all        1.1816     0.0163 0.0068       3       6.2511     0.3351      0.9107
+            mono        1.1832     0.0179 0.0067       4       6.3624     0.3475      0.9105
+           rates        1.1850     0.0197 0.0146       6       7.0806     0.3525      0.9107
+      sharesOnly        1.1868     0.0215 0.0143       4       6.9110     0.3240      0.9182
+     base+linear        1.2017     0.0364 0.0154       3       7.1180     0.3520      0.9063
+          shares        1.2136     0.0483 0.0157       3       7.2737     0.3374      0.9067
+       ratesOnly        1.3116     0.1464 0.0176       0       7.1644     0.3540      0.8912
+         linear+        1.4310     0.2657 0.0332       0       7.5937     0.3029      0.8888

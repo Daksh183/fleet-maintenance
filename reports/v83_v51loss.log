@@ -1,0 +1,13 @@
+v51 on the public 30% scale (x0.3), expected under the full posterior; actual public score 16,388
+
+  inspections                                             4299  (31.5%)
+  unused budget, flagged vehicles that don't fail         2083  (15.3%)
+  shortfall, flagged failures (cost above budget)         3310  (24.3%)
+  unused budget, flagged failures (cost below budget)     1685  (12.3%)
+  missed failures (not flagged)                           2269  (16.6%)
+  TOTAL expected                                         13646
+
+expected counts on the public 30%: flagged 430; failures among flagged 170; flagged that don't fail 260; failures missed 19  (catch rate 90%)
+oracles: knowing which vehicles fail (v51-style budgets) 7338; knowing exact repair costs (v51 flags) 6568
+expected counts on the public 30%: flagged 430; failures among flagged 170; flagged that don't fail 260; failures missed 19  (catch rate 90%)
+oracles: knowing which vehicles fail (v51-style budgets) 7338; knowing each vehicle's repair cost if it fails (v51 flags, not knowing whether it fails) 9681; knowing both 1889

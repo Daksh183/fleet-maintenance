@@ -22,8 +22,19 @@ One **self-contained** notebook per version (each needs only `../data/train.csv`
 | `v14_quantile_map.ipynb` | v14 quantile-map the instrument-like drifted sensors s120/s122 for the classifier (flag count matched, on the v13 base) | #14 `sub14-2026-11-23-v14_map` | 17,375.65 |
 | `v15_quantile_map_v12_base.ipynb` | v15 the same mapping on the v12_robust base (replication; conclusion: no reliable effect) | #15 `sub15-2026-11-23-v15_map_v12` | 17,058.28 |
 | `v17_level_probes.ipynb` | v17 level probes on the v12_robust base: flagged budgets ×1.25, and k ×1.35 (≈7% more flags); with the model-expected change of each | #16 `sub16-2026-11-24-v17_bud125`, #17 `sub17-2026-11-24-v17_k135` | 16,826 / 16,908 |
+| `v18_censoring_ensemble.ipynb` | v18 censoring-weighted classifier ensemble (rejected) | #18 `sub18-2026-11-24-v18_ens10` | 17,624 |
+| `v22_drop_depot_sensors.ipynb` | v22 classifier without s120/s122 | #19 `sub19-2026-11-25-v22_nos122` | 17,172.57 |
+| `v24_soft_labels.ipynb` | v24 soft labels for censored vehicles (rejected) | #20 `sub20-2026-11-25-v24_pu` | 17,575 |
+| `v29_harness_bayes.ipynb` | v29 Bayes decision under a posterior fitted to the public scores | #21 `sub21-2026-11-25-v29_bayes` | 17,196 |
+| `v35_gp_budget_combo.ipynb` | v35 harness flags, Gaussian-process budgets | #24 `sub24-2026-11-27-v35_combo` | 16,878 |
+| `v37_gp_sensor_costs.ipynb` | v37 Gaussian-process costs with wear and sensor groups | #25 `sub25-2026-11-27-v37_bayes_gp2` | 16,410 |
+| `v42_gp_banded_spread.ipynb` | v42 cost spread by predicted-cost band | #26 `sub26-2026-11-27-v42_gp_bands` | 16,487 |
+| `v51_gp_reduced_inputs.ipynb` | v51 repair-cost model with fewer inputs | #27 `sub27-2026-11-27-v51_gp_reduced` | 16,388 |
+| `v66_survival_rankings.ipynb` | v66 survival-model rankings added to the harness | not uploaded yet | n/a |
+| `v69_aftfull.ipynb` | v69 survival-model ranking replaces the classifier | not uploaded yet | n/a |
+| `v82_hedge.ipynb` | v82 Bayes decision hedged over every ranking family | #28 `sub28-2026-11-27-v82_hedge` | pending |
 
-`build_part1-6.py` + `nbkit.py` generate the notebooks; `run_all.sh` executes them; `verify_outputs.py` checks that each notebook regenerates exactly the CSV in `../submissions/`.
+`build_part1-7.py` + `nbkit.py` generate the notebooks (part 7 loads saved artifacts from `../reports/`); `run_all.sh` executes them; `verify_outputs.py` checks that each notebook regenerates exactly the CSV in `../submissions/`.
 
 ## V32–V34 rebuild notebooks
 
