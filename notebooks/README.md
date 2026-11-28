@@ -1,10 +1,13 @@
 # Notebooks
 
+**Final report:** `final_report.ipynb` (built by `build_report.py`) regenerates the three selected submissions (v3, v34, v51), checks them against `../submissions/`, and documents the analysis by evaluation criterion.
+
+
 One **self-contained** notebook per version (each needs only `../data/train.csv` and `../data/test.csv`, runs top to bottom, and writes its Kaggle CSV to `outputs/`). Every uploaded Kaggle submission is tagged in git to the notebook below that produced it (see `../SUBMISSIONS.md`).
 
 | Notebook | Version | Kaggle submission (git tag) | Public score |
 |---|---|---|---|
-| `fleet_maintenance.ipynb` | **Final report**: the three selected models (Model 1-3) | built from Models 1, 2, 3 | n/a |
+| `fleet_maintenance.ipynb` | Earlier combined report (23 Nov, Models 1-3 = v3, v5, v9 era); superseded by `final_report.ipynb` | n/a | n/a |
 | `v0_baselines.ipynb` | v0 trivial baselines | none | n/a |
 | `v1_eda.ipynb` | v1 EDA, censoring, depot-shift diagnosis | none | n/a |
 | `v2_naive_xgboost.ipynb` | v2 XGBoost, flag if p > 0.5 | #1 `sub01-2026-11-19-v2` | 74,933.17 |
